@@ -16,7 +16,7 @@ The script preserves the view-based hierarchy structure encoded in X3D, generati
 
 This script takes a QIF file as input, and parses a subset of the file.
 If the script is attached to the same object as the ReadX3D.cs script, it tries to match X3D annotations to the measured characteristics inspection results from QIF.
-The new QIF annotations are color coded and grouped based on the results.
+The new QIF annotations are color coded and grouped based on the results (Passed, Failed and Inconclusive).
 
 #### Assets/StreamingAssets/QIF
 
@@ -28,7 +28,7 @@ Latest version of X3D files created by SFA. Also has older version of the X3D fi
 
 ## Usage
 
-Open the project in Unity.
+Open the project in Unity version 2020.X.
 
 This project is the AR-ready version deployed on the android tablet in the DIVE lab. 
 You can also jut use the ReadX3D.cs and ReadQIF.cs scripts in a new Unity project. 
