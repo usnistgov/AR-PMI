@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<QCARConfig>
+<Tracking>
+<ModelTarget name="nist_mtc_crada_cover_rev-A" motionHint="adaptive" trackingMode="default"/>
+
+</Tracking>
+
+<Assembly name="nist_mtc_crada_cover_rev-As_assembly" assemblyId="d7985fc2f2d24552b13c575cb214261c">
+<Part name="nist_mtc_crada_cover_rev-A" translation="0 0 0" rotation="AD: 0 0 1 0"/>
+<EntryPoint name="viewpoint_0000" translation="0.000882873 -0.0593673 0.280447" rotation="AD: 0.7936159119726559 1.4627433376600176 -0.7857466111082699 153.915" trained="no">
+
+</EntryPoint>
+
+</Assembly>
+
+</QCARConfig>

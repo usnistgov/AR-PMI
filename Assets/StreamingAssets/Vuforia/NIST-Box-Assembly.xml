@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<QCARConfig>
+<Tracking>
+<ModelTarget name="nist_mtc_crada_cover_rev-A" motionHint="adaptive" trackingMode="default"/>
+<ModelTarget name="nist_mtc_crada_box_rev-A" motionHint="adaptive" trackingMode="default"/>
+<ModelTarget name="nist_mtc_crada_plate_Copy" motionHint="adaptive" trackingMode="default"/>
+
+</Tracking>
+
+<Assembly name="nist_mtc_crada_cover_rev-As_assembly" assemblyId="d7985fc2f2d24552b13c575cb214261c">
+<Part name="nist_mtc_crada_cover_rev-A" translation="0 0 0" rotation="AD: 0 0 1 0"/>
+<EntryPoint name="viewpoint_0000" translation="0.000882873 -0.0593673 0.280447" rotation="AD: 0.7936159119726773 1.4627433376599703 -0.7857466111082396 153.915" trained="yes">
+
+</EntryPoint>
+
+</Assembly>
+<Assembly name="nist_mtc_crada_box_rev-As_assembly" assemblyId="51dcb938b7944671a2ab87d4b6a26429">
+<Part name="nist_mtc_crada_box_rev-A" translation="0 0 0" rotation="AD: 0 0 1 0"/>
+<EntryPoint name="viewpoint_0001" translation="0.0124251 -0.0600392 0.376012" rotation="AD: 0.8636440732577021 1.745626745423846 -0.5941047627349344 163.572" trained="yes">
+
+</EntryPoint>
+
+</Assembly>
+<Assembly name="nist_mtc_crada_plate_Copys_assembly" assemblyId="499b2bd746074c60bd1179f03d63a1ba">
+<Part name="nist_mtc_crada_plate_Copy" translation="0 0 0" rotation="AD: 0 0 1 0"/>
+<EntryPoint name="viewpoint_0001" translation="0.059702 -0.037684 0.169446" rotation="AD: 0.08668519965526315 5.365740111876943 -1.014000924203802 179.656" trained="yes">
+
+</EntryPoint>
+
+</Assembly>
+<ModelTargetDatabase name="NIST-Box-Assembly" />
+</QCARConfig>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<QCARConfig>
+<Tracking>
+<ModelTarget name="nist_ftc_07_asme1_rd" motionHint="adaptive" trackingMode="default"/>
+
+</Tracking>
+
+<Assembly name="nist_ftc_07_asme1_rds_assembly" assemblyId="b304b3cfe927469dbd6f1487cbeb21f7">
+<Part name="nist_ftc_07_asme1_rd" translation="0 0 0" rotation="AD: 0 0 1 0"/>
+<EntryPoint name="viewpoint_0000" translation="6.16868e-19 -0.00117964 0.0134786" rotation="AD: 0.9999983858544297 0.023511510675382256 -0.07991249106260968 212.682" trained="no">
+
+</EntryPoint>
+<EntryPoint name="viewpoint_0001" translation="5.02307e-17 -0.00127237 0.0136468" rotation="AD: 0.9990080821924164 0.10568390361461266 -0.4778797293861568 202.465" trained="no">
+
+</EntryPoint>
+<EntryPoint name="viewpoint_0002" translation="1.95261e-16 -0.00108945 0.0125503" rotation="AD: -0.9715693747321857 -0.3517368670719026 0.9913928698998329 152.93" trained="no">
+
+</EntryPoint>
+<EntryPoint name="viewpoint_0005" translation="1.62148e-17 -0.000712714 0.0125446" rotation="AD: -0.5198042294309362 -1.0243561229381029 1.793154762517381 164.124" trained="no">
+
+</EntryPoint>
+<EntryPoint name="viewpoint_0007" translation="-1.03036e-16 -0.000103541 0.0104157" rotation="AD: -0.0170468855713402 -1.3646515858578674 1.46935242406061 179.095" trained="no">
+
+</EntryPoint>
+
+</Assembly>
+
+</QCARConfig>

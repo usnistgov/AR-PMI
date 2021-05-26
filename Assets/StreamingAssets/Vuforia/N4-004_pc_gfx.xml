@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<QCARConfig>
+<Tracking>
+<ModelTarget name="N4-004_pc_gfx" motionHint="adaptive" trackingMode="default"/>
+
+</Tracking>
+
+<Assembly name="N4-004_pc_gfxs_assembly" assemblyId="9a8d9a7eabe54a3d8d99b31df97acd0b">
+<Part name="N4-004_pc_gfx" translation="0 0 0" rotation="AD: 0 0 1 0"/>
+<EntryPoint name="viewpoint_0000" translation="3.33067e-16 -4.32289e-07 1.20124" rotation="AD: 0.9992840401277849 0.10622946137280555 -0.3963862561724548 207.846" trained="no">
+
+</EntryPoint>
+<EntryPoint name="viewpoint_0001" translation="-1.66533e-16 -7.79039e-08 1.39307" rotation="AD: -0.9999999983849176 0.007992093890102652 -0.009353957584083994 98.9826" trained="no">
+
+</EntryPoint>
+<EntryPoint name="viewpoint_0002" translation="6.56159e-16 -4.98142e-07 1.10921" rotation="AD: 0.9999999988363547 0.0012510338732793663 -0.03861069024136585 183.709" trained="no">
+
+</EntryPoint>
+<EntryPoint name="viewpoint_0003" translation="-2.29157e-14 -4.00361e-07 1.38525" rotation="AD: 0.9803281517452188 -0.3042336036184733 0.9178667896164252 206.555" trained="no">
+
+</EntryPoint>
+
+</Assembly>
+
+</QCARConfig>

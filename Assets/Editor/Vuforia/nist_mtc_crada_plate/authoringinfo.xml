@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<QCARInfo>
+<TargetSet version="14.0" toolVersion="9.6.3">
+<ModelTarget name="nist_mtc_crada_plate" targetId="ac2dfe3174f5415388f8e523e60b613b" version="11.1" toolVersion="9.6.3" bbox="-0.120000 -0.000000 -0.000000 0.000000 0.071160 0.005000" previewImage="ac2dfe3174f5415388f8e523e60b613b_preview.jpg"/>
+
+</TargetSet>
+
+<Assembly name="nist_mtc_crada_plates_assembly" assemblyId="499b2bd746074c60bd1179f03d63a1ba">
+<Part name="nist_mtc_crada_plate" translation="0 0 0" rotation="AD: 0 0 1 0"/>
+<EntryPoint name="viewpoint_0001" translation="0.059702 -0.037684 0.169446" rotation="AD: 0.08668519965526142 5.365740111876944 -1.0140009242038022 179.656" image="nist_mtc_crada_plate_viewpoint_0001.png" trained="no">
+
+</EntryPoint>
+<EntryPoint name="viewpoint_0002" translation="0.0722544 -0.00360995 0.189601" rotation="AD: -0.8226437981284156 3.1636770982532134 -0.5978618857089987 185.357" image="nist_mtc_crada_plate_viewpoint_0002.png" trained="no">
+
+</EntryPoint>
+<EntryPoint name="viewpoint_0003" translation="-0.0597936 0.0374792 0.170795" rotation="AD: 0.9999999988099744 -0.015033556600038446 0.0033238711850159725 155.068" image="nist_mtc_crada_plate_viewpoint_0003.png" trained="no">
+
+</EntryPoint>
+
+</Assembly>
+
+</QCARInfo>
