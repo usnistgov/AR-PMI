@@ -22,10 +22,13 @@ MonoBehaviour:
     virtualSceneScaleFactor: 1
     useDelayedLoadingObjectTargets: 0
     modelTargetRecoWhileExtendedTracked: 1
-    version: 9.6.3
-    eulaAcceptedVersions: '{"Values":["8.5","9.6"]}'
+    shareRecordingsInITunes: 0
+    version: 9.8.8
+    eulaAcceptedVersions: '{"Values":["8.5","9.6","9.8"]}'
   database:
     disableModelExtraction: 0
+  shaders:
+    depthMaskShader: {fileID: 4800000, guid: 1ce7eb78425fb1540838bc9d5d95857a, type: 3}
   videoBackground:
     numDivisions: 2
     videoBackgroundShader: {fileID: 4800000, guid: f40623b353e2f1943b1b3ba42975db7a, type: 3}
