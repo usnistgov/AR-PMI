@@ -6,12 +6,15 @@ using System.Xml.Serialization;
 using System.Xml;
 using System;
 
+[RequireComponent(typeof(ReadX3D))]
 public class ReadQIF : MonoBehaviour
 {
     public string qifFile = "3.0/QIF30_BoxResults_19_samples_May20.QIF";
     List<CharacteristicItem> characteristicItemList;
     List<CharacteristicActual> characteristicActualList;
-    public string characteristicItemId = "86";
+    Dictionary<string, GameObject> annotationDict = new Dictionary<string, GameObject>();
+    Dictionary<string, Color> colorDict = new Dictionary<string, Color>();
+    ReadX3D x3dScript;
 
     class CharacteristicItem
     {
@@ -61,11 +64,10 @@ public class ReadQIF : MonoBehaviour
 
     }
 
-    Dictionary<string, GameObject> annotationDict = new Dictionary<string, GameObject>();
-    Dictionary<string, Color> colorDict = new Dictionary<string, Color>();
-
     void Start()
     {
+        x3dScript = gameObject.GetComponent<ReadX3D>();
+
         string filePath = Application.streamingAssetsPath + "/QIF/" + qifFile;
         characteristicItemList = new List<CharacteristicItem>();
         characteristicActualList = new List<CharacteristicActual>();
@@ -79,10 +81,7 @@ public class ReadQIF : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.J))
-        {
-            ShowResultsPerCharacteristicItem(characteristicItemId);
-        }
+
     }
 
     string ReadXML(string filePath)
@@ -136,7 +135,7 @@ public class ReadQIF : MonoBehaviour
         {
             id = characteristicItemNode.Attributes["id"].Value;
         }
-        
+
         nameNode = characteristicItemNode.SelectSingleNode("def:Name", xmlnsManager);
 
         if (nameNode != null)
@@ -149,17 +148,17 @@ public class ReadQIF : MonoBehaviour
 
         featureItemIdNode = characteristicItemNode.SelectSingleNode("def:FeatureItemIds/def:Id", xmlnsManager);
 
-        if(featureItemIdNode != null)
+        if (featureItemIdNode != null)
             featureItemId = featureItemIdNode.InnerText;
 
         measurmentDeviceIdNode = characteristicItemNode.SelectSingleNode("def:MeasurementDeviceIds/def:Id", xmlnsManager);
 
-        if(measurmentDeviceIdNode != null)
+        if (measurmentDeviceIdNode != null)
             measurmentDeviceId = measurmentDeviceIdNode.InnerText;
 
         characteristicNominalIdNode = characteristicItemNode.SelectSingleNode("def:CharacteristicNominalId", xmlnsManager);
 
-        if(characteristicNominalIdNode != null)
+        if (characteristicNominalIdNode != null)
             characteristicNominalId = characteristicNominalIdNode.InnerText;
 
 
@@ -201,17 +200,17 @@ public class ReadQIF : MonoBehaviour
 
         statusNode = characteristicActualNode.SelectSingleNode("def:Status/def:CharacteristicStatusEnum", xmlNamespaceManager);
 
-        if(statusNode != null)
+        if (statusNode != null)
             status = statusNode.InnerText;
 
         characteristicItemIdNode = characteristicActualNode.SelectSingleNode("def:CharacteristicItemId", xmlNamespaceManager);
-        
-        if(characteristicItemIdNode != null)
+
+        if (characteristicItemIdNode != null)
             characteristicItemId = characteristicItemIdNode.InnerText;
 
         valueNode = characteristicActualNode.SelectSingleNode("def:Value", xmlNamespaceManager);
 
-        if(valueNode != null)
+        if (valueNode != null)
             value = valueNode.InnerText;
 
         CharacteristicActual characteristicActual = new CharacteristicActual(id, status, characteristicItemId, value);
@@ -286,14 +285,13 @@ public class ReadQIF : MonoBehaviour
                     annotationDict[assignedColor.Key].transform.SetParent(inconclusiveObject.transform);
                 }
 
-
                 annotationDict[assignedColor.Key].transform.localPosition = new Vector3(0, 0, 0);
                 annotationDict[assignedColor.Key].transform.localScale = new Vector3(1, 1, 1);
                 annotationDict[assignedColor.Key].transform.localRotation = new Quaternion(0, 0, 0, 0);
 
                 try
                 {
-                    annotationDict[assignedColor.Key].transform.GetChild(0).gameObject.GetComponent<MeshRenderer>().material.color = assignedColor.Value;
+                    annotationDict[assignedColor.Key].gameObject.GetComponent<MeshRenderer>().material.color = assignedColor.Value;
                 }
                 catch (Exception e)
                 {
@@ -306,32 +304,28 @@ public class ReadQIF : MonoBehaviour
     }
     void GenerateDictionary()
     {
-        GameObject parent = this.gameObject;
-
-        foreach (Transform view in parent.transform)
+        for (int i = 0; i < x3dScript.annotationList.Count; i++)
         {
-            foreach (Transform annotation in view)
+            for (int j = 0; j < characteristicItemList.Count; j++)
             {
-                for (int i = 0; i < characteristicItemList.Count; i++)
+                string[] split = characteristicItemList[j].Name.Split('.'); // If WIDTH6.3 -> only look for WIDTH6
+
+                if (x3dScript.annotationList[i].name.ToUpper().Contains(split[0])
+                    && !annotationDict.ContainsKey(characteristicItemList[j].Name))
                 {
-                    string[] split = characteristicItemList[i].Name.Split('.'); // If WIDTH6.3 -> only look for WIDTH6
+                    GameObject annotation = x3dScript.annotationList[i].annotationObject;
+                    GameObject newAnnotationInstance = Instantiate(annotation, annotation.transform.position, annotation.transform.rotation);
+                    newAnnotationInstance.transform.localScale = new Vector3(1, 1, 1);
+                    newAnnotationInstance.name = "QIF Annotation " + characteristicItemList[j].Name;
 
-                    if (annotation.name.ToUpper().Contains(split[0])
-                        && !annotationDict.ContainsKey(characteristicItemList[i].Name))
-                    {
-                        GameObject newAnnotationInstance = Instantiate(annotation.gameObject, annotation.position, annotation.rotation);
-                        newAnnotationInstance.transform.localScale = new Vector3(1, 1, 1);
-                        newAnnotationInstance.name = "QIF Annotation " + characteristicItemList[i].Name;
-
-                        annotationDict.Add(characteristicItemList[i].Name, newAnnotationInstance);
-                    }
+                    annotationDict.Add(characteristicItemList[j].Name, newAnnotationInstance);
                 }
             }
         }
     }
 
     void AssignColors()
-    {   
+    {
         for (int i = 0; i < characteristicItemList.Count; i++)
         {
             int passCount = 0, failCount = 0;
@@ -356,29 +350,5 @@ public class ReadQIF : MonoBehaviour
 
             //Debug.Log("Characterisitc " + characteristicItemList[i].Name + ", ID: " + characteristicItemList[i].Id + ". (FAILS: " + failCount + " / PASSES: " + passCount + ")");
         }
-    }
-
-    void ShowResultsPerCharacteristicItem(string characteristicItemId)
-    {
-        int passCount = 0, failCount = 0;
-        float sumVal = 0;
-
-        for (int i = 0; i < characteristicActualList.Count; i++)
-        {
-            if (characteristicActualList[i].CharacteristicItemId == characteristicItemId)
-            {
-                if (characteristicActualList[i].Status == "PASS")
-                    passCount++;
-                else
-                    failCount++;
-
-                sumVal += float.Parse(characteristicActualList[i].Value);
-
-                Debug.Log(characteristicActualList[i].ToString());
-            }
-        }
-
-        Debug.Log("Passes: " + passCount + " / Fails: " + failCount);
-        Debug.Log("Average value: " + sumVal / (passCount + failCount));
     }
 }

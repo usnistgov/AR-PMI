@@ -18,7 +18,37 @@ public class ReadX3D : MonoBehaviour
     IDictionary<string, string> dictionary = new Dictionary<string, string>();
     public GameObject scaleToTarget;
     int assetIncrement = 0;
+    public List<Annotation> annotationList = new List<Annotation>();
 
+    public class Annotation
+    {
+        public string id { get; set; }
+        public string description { get; set; }
+        public string name { get; set; }
+
+        public GameObject annotationObject { get; set; }
+        public GameObject surface { get; set; }
+
+        public Annotation(string id, string description, string name, GameObject annotationObject)
+        {
+            this.id = id;
+            this.description = description;
+            this.name = name;
+            this.annotationObject = annotationObject;
+        }
+        public void SetSurface(GameObject surface)
+        {
+            this.surface = surface;
+        }
+
+        override public string ToString()
+        {
+            if(surface != null)
+                return "Id: " + id + ", Description: " + description + ", Name: " + name + ", GameObject: " + annotationObject.name + ", Surface: " + surface.name;
+            else
+                return "Id: " + id + ", Description: " + description + ", Name: " + name + ", GameObject: " + annotationObject.name;
+        }
+    }
 
     void Start()
     {
@@ -63,27 +93,45 @@ public class ReadX3D : MonoBehaviour
     GameObject ParseSwitchNode(XmlNode switchNode)
     {
         XmlNodeList groupList;
+        string switchId = "Switch";
 
-        string switchId = switchNode.Attributes["id"].Value;
+        if(switchNode.Attributes["id"] != null)
+        {
+            switchId = switchNode.Attributes["id"].Value;
+        }
 
         GameObject viewObject = new GameObject(switchId);
 
         groupList = switchNode.SelectNodes("Group");
         foreach (XmlNode groupNode in groupList)
         {
-            ParseGroupNode(groupNode, viewObject);
+            //GameObject groupObject = new GameObject("Group"); //TODO: this causes issues with QIF
+
+            //if (groupNode.Attributes["id"] != null)
+            //    groupObject.name = groupNode.Attributes["id"].Value;
+
+            //groupObject.transform.SetParent(viewObject.transform);
+            //ResetTransform(groupObject);
+
+            ParseGroupNode(groupNode, viewObject, switchId); // (x, groupObject)
         }
 
         return viewObject;
     }
 
-    void ParseGroupNode(XmlNode groupNode, GameObject viewObject) //TODO: should return GameObject[] or List<GameObject> ?
+    void ParseGroupNode(XmlNode groupNode, GameObject viewObject, string parentSwitchId)
     {
         XmlNodeList shapeNodeList, groupNodeList, switchList;
         GameObject geometry;
         List<CombineInstance> combineList = new List<CombineInstance>();
         List<Material> materialList = new List<Material>();
+        string groupId = "Group";
         //int triangleCount = 0;
+
+        if (groupNode.Attributes["id"] != null)
+            groupId = groupNode.Attributes["id"].Value;
+
+        string[] splitGroupId = groupId.Split('|');
 
         switchList = groupNode.SelectNodes("Switch");
         foreach (XmlNode switchNode in switchList)
@@ -96,15 +144,15 @@ public class ReadX3D : MonoBehaviour
         groupNodeList = groupNode.SelectNodes("Group");
         foreach (XmlNode nestedGroupNode in groupNodeList)
         {
-            GameObject groupObject = new GameObject("Group");
+            /*GameObject groupObject = new GameObject("Group");
 
             if (nestedGroupNode.Attributes["id"] != null)
                 groupObject.name = nestedGroupNode.Attributes["id"].Value;
 
             groupObject.transform.SetParent(viewObject.transform);
-            ResetTransform(groupObject);
+            ResetTransform(groupObject);*/
 
-            ParseGroupNode(nestedGroupNode, groupObject);
+            ParseGroupNode(nestedGroupNode, viewObject, parentSwitchId);
         }
 
         shapeNodeList = groupNode.SelectNodes("Shape");
@@ -124,13 +172,11 @@ public class ReadX3D : MonoBehaviour
             }
             else
             {
-                geometry = new GameObject("Mesh");
+                geometry = new GameObject(groupId);
                 geometry.AddComponent<MeshFilter>().mesh = shape.Item2;
                 geometry.AddComponent<MeshRenderer>().material = shape.Item1;
                 geometry.transform.SetParent(viewObject.transform);
                 ResetTransform(geometry);
-
-                //return geometry;
             }
 
         }
@@ -138,7 +184,8 @@ public class ReadX3D : MonoBehaviour
         if (combineSubmeshes && combineList.Count > 0)
         {
             Mesh combinedMesh = new Mesh();
-            geometry = new GameObject("Mesh");
+            geometry = new GameObject(groupId);
+
             if (ContainsDistinct(materialList))
             {
                 //Don't combine submeshes and use different materials
@@ -160,13 +207,30 @@ public class ReadX3D : MonoBehaviour
             geometry.AddComponent<MeshFilter>().mesh = combinedMesh;
 
             geometry.transform.SetParent(viewObject.transform);
+
+            // ADD MESH COLLIDER
+            geometry.AddComponent<MeshCollider>();
+            geometry.AddComponent<AnnotationTrigger>();
+
             ResetTransform(geometry);
+
+            if (splitGroupId.Length > 2 && parentSwitchId.Contains("swView")) //TODO: talk to Bob about this. Is this reliable?
+            {
+                annotationList.Add(new Annotation(splitGroupId[0], splitGroupId[1], splitGroupId[2], geometry));
+            }
+            else if (parentSwitchId == "surfaceSwitch") //TODO: talk to Bob about this.
+            {
+                int index = FindAnnotation(geometry.name);
+                if(index != -1)
+                {
+                    annotationList[index].SetSurface(geometry);
+                }
+
+            }
 
             if (saveMeshes)
                 SaveMesh(combinedMesh, "Test");
-            //return geometry;
         }
-        //return null; //TODO: OK?
     }
 
     /* <Shape> Description
@@ -354,7 +418,15 @@ public class ReadX3D : MonoBehaviour
             }
         }
 
-        faceMesh = GenerateFaceMesh(faceCoordinatesString, coordIndexString);
+        if(faceCoordinatesString != "" && coordIndexString != "")
+        {
+            faceMesh = GenerateFaceMesh(faceCoordinatesString, coordIndexString);
+        }
+        else
+        {
+            faceMesh = new Mesh();
+        }
+        
 
         return faceMesh;
     }
@@ -477,6 +549,19 @@ public class ReadX3D : MonoBehaviour
         }
 
         return array;
+    }
+
+    public int FindAnnotation(string annotationName)
+    {
+        for(int i=0; i<annotationList.Count; i++)
+        {
+            if (annotationList[i].name.ToUpper().Trim() == annotationName.ToUpper().Trim())
+            {
+                return i;
+            }      
+        }
+
+        return -1;
     }
 
     Color ParseColor(string input)
