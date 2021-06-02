@@ -14,7 +14,7 @@ public class ReadX3D : MonoBehaviour
 {
     public float lineWidth = 0.5f;
     public string x3dFile = "NIST_MTC_CRADA_PLATE_REV-A-sfa.x3d";
-    public bool flipYZ = true, combineSubmeshes = true, saveMeshes = false;
+    public bool flipYZ = true, combineSubmeshes = true, saveMeshes = false, addMeshColliders = true;
     IDictionary<string, string> dictionary = new Dictionary<string, string>();
     public GameObject scaleToTarget;
     int assetIncrement = 0;
@@ -208,9 +208,13 @@ public class ReadX3D : MonoBehaviour
 
             geometry.transform.SetParent(viewObject.transform);
 
-            // ADD MESH COLLIDER
-            geometry.AddComponent<MeshCollider>();
-            geometry.AddComponent<AnnotationTrigger>();
+            // ADD MESH COLLIDERS. DO NOT ADD COLLIDERS TO PART GEOMETRY
+            if(addMeshColliders && parentSwitchId != "geometrySwitch")
+            {
+                geometry.AddComponent<MeshCollider>();
+                geometry.AddComponent<AnnotationTrigger>();
+            }
+            
 
             ResetTransform(geometry);
 
@@ -563,6 +567,7 @@ public class ReadX3D : MonoBehaviour
 
         return -1;
     }
+
 
     Color ParseColor(string input)
     {

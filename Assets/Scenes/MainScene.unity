@@ -533,7 +533,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   qifFile: 3.0/QIF30_CoverResults_20_samples_May20.QIF
-  characteristicItemId: 86
 --- !u!114 &497122069
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -551,6 +550,7 @@ MonoBehaviour:
   flipYZ: 1
   combineSubmeshes: 1
   saveMeshes: 0
+  addMeshColliders: 1
   scaleToTarget: {fileID: 0}
 --- !u!1 &537520212
 GameObject:
@@ -591,13 +591,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 537520212}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ee68dc8867357c843b42edee954758ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   qifFile: 3.0/QIF30_BoxResults_19_samples_May20.QIF
-  characteristicItemId: 86
 --- !u!114 &537520215
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -615,6 +614,7 @@ MonoBehaviour:
   flipYZ: 1
   combineSubmeshes: 1
   saveMeshes: 0
+  addMeshColliders: 1
   scaleToTarget: {fileID: 0}
 --- !u!1 &705507993
 GameObject:
@@ -821,7 +821,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &852507530
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1319,7 +1319,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   qifFile: 3.0/QIF30_PlateResults_20_samples_May20.QIF
-  characteristicItemId: 86
 --- !u!114 &1138326792
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1337,6 +1336,7 @@ MonoBehaviour:
   flipYZ: 1
   combineSubmeshes: 1
   saveMeshes: 0
+  addMeshColliders: 1
   scaleToTarget: {fileID: 0}
 --- !u!1 &1322296247
 GameObject:
@@ -2249,7 +2249,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1639041819
 MonoBehaviour:
   m_ObjectHideFlags: 0

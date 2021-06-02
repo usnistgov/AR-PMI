@@ -93,23 +93,25 @@ public class TrackingScript : MonoBehaviour
         textInspectionData.SetActive(true);
         DeletePreviousToggles(toggleContainerQIF);
 
-       
-        GameObject qifObject = currentlyTrackedObject.transform.Find("QIF").gameObject;
-
-        for (int i = 0; i < qifObject.transform.childCount; i++)
+        if (currentlyTrackedObject.transform.Find("QIF"))
         {
+            GameObject qifObject = currentlyTrackedObject.transform.Find("QIF").gameObject;
 
-            Toggle newToggle = Instantiate(toggleQIF, toggleQIF.transform.parent);
-            newToggle.gameObject.SetActive(true);
-            newToggle.GetComponentInChildren<Text>().text = qifObject.transform.GetChild(i).transform.name;
-            //qifObject.transform.GetChild(i).gameObject.SetActive(false); //disable QIF by default
-            newToggle.transform.position += new Vector3(0, i * -40, 0);
-            //newToggle.isOn = false;
-
-            newToggle.onValueChanged.AddListener(delegate
+            for (int i = 0; i < qifObject.transform.childCount; i++)
             {
-                SwitchQIFView(newToggle.isOn, newToggle.GetComponentInChildren<Text>().text);
-            });
+
+                Toggle newToggle = Instantiate(toggleQIF, toggleQIF.transform.parent);
+                newToggle.gameObject.SetActive(true);
+                newToggle.GetComponentInChildren<Text>().text = qifObject.transform.GetChild(i).transform.name;
+                //qifObject.transform.GetChild(i).gameObject.SetActive(false); //disable QIF by default
+                newToggle.transform.position += new Vector3(0, i * -40, 0);
+                //newToggle.isOn = false;
+
+                newToggle.onValueChanged.AddListener(delegate
+                {
+                    SwitchQIFView(newToggle.isOn, newToggle.GetComponentInChildren<Text>().text);
+                });
+            }
         }
     }
     void DeletePreviousToggles(GameObject toggleContainer)

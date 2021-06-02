@@ -8,7 +8,9 @@ public class AnnotationTrigger : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        GameObject view = this.gameObject.transform.parent.parent.gameObject;
 
+        x3dScript = view.GetComponent<ReadX3D>();
     }
 
     // Update is called once per frame
@@ -19,24 +21,90 @@ public class AnnotationTrigger : MonoBehaviour
     private void OnMouseDown()
     {
         Debug.Log("TRIGGERED " + this.gameObject.name);
-        GameObject view = this.gameObject.transform.parent.parent.gameObject;
 
-        x3dScript = view.GetComponent<ReadX3D>();
 
         string[] splitName = this.gameObject.name.Split('|');
-        int index = -1;
+        //int index = -1;
+        List<int> indexes = new List<int>();
         if (splitName.Length > 2)
-            index = x3dScript.FindAnnotation(splitName[2]);
+            indexes = FindAnnotations(splitName[2]);
+        else if (splitName.Length == 1)
+            indexes = FindSurfaces(splitName[0]);
 
-        if(index != -1)
-            try
+        foreach (int index in indexes)
+        {
+            /*if(x3dScript.annotationList[index].surface.GetComponent<MeshRenderer>().material.shader == Shader.Find("Unlit/Color"))
             {
-                x3dScript.annotationList[index].surface.GetComponent<MeshRenderer>().material.SetOverrideTag("RenderType", "Cutout");
+                x3dScript.annotationList[index].surface.GetComponent<MeshRenderer>().material.shader = Shader.Find("Standard");
             }
-            catch
+            else
             {
+                x3dScript.annotationList[index].surface.GetComponent<MeshRenderer>().material.shader = Shader.Find("Unlit/Color");
+            }*/
+            if(x3dScript.annotationList[index].surface != null)
+                if (x3dScript.annotationList[index].surface.GetComponent<MeshRenderer>().material.renderQueue == 3000)
+                {
+                    x3dScript.annotationList[index].surface.GetComponent<MeshRenderer>().material.renderQueue = 1;
 
+                    ShowAnnotations();
+                }
+                else
+                {
+                    x3dScript.annotationList[index].surface.GetComponent<MeshRenderer>().material.renderQueue = 3000;
+
+                    HideAnnotations(index);
+                }
+            //x3dScript.annotationList[index].surface.GetComponent<MeshRenderer>().material.SetOverrideTag("RenderType", "Cutout");
+        }
+    }
+    List<int> FindAnnotations(string annotationName)
+    {
+        List<int> indexes = new List<int>();
+        for (int i = 0; i < x3dScript.annotationList.Count; i++)
+        {
+            if (x3dScript.annotationList[i].name.ToUpper().Trim() == annotationName.ToUpper().Trim())
+            {
+                indexes.Add(i);
             }
-            
+        }
+
+        return indexes;
+    }
+    List<int> FindSurfaces(string annotationName)
+    {
+        List<int> indexes = new List<int>();
+        for (int i = 0; i < x3dScript.annotationList.Count; i++)
+        {
+            if (x3dScript.annotationList[i].surface != null)
+                if (x3dScript.annotationList[i].surface.gameObject.name.ToUpper().Trim() == annotationName.ToUpper().Trim())
+                {
+                    indexes.Add(i);
+                }
+        }
+
+        return indexes;
+    }
+
+    void HideAnnotations(int exceptionIndex)
+    {
+        for (int i = 0; i < x3dScript.annotationList.Count; i++)
+        {
+            if (i != exceptionIndex)
+            {
+                x3dScript.annotationList[i].annotationObject.SetActive(false);
+                //annotationList[i].surface.SetActive(false);
+                if(x3dScript.annotationList[i].surface != null)
+                    x3dScript.annotationList[i].surface.GetComponent<MeshRenderer>().material.renderQueue = 1;
+            }
+
+        }
+    }
+
+    void ShowAnnotations()
+    {
+        for (int i = 0; i < x3dScript.annotationList.Count; i++)
+        {
+            x3dScript.annotationList[i].annotationObject.SetActive(true);
+        }
     }
 }
