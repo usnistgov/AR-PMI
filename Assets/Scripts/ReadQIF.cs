@@ -12,9 +12,10 @@ public class ReadQIF : MonoBehaviour
     public string qifFile = "3.0/QIF30_BoxResults_19_samples_May20.QIF";
     List<CharacteristicItem> characteristicItemList;
     List<CharacteristicActual> characteristicActualList;
-    Dictionary<string, GameObject> annotationDict = new Dictionary<string, GameObject>();
+    Dictionary<string, Annotation> annotationDict = new Dictionary<string, Annotation>();
     Dictionary<string, Color> colorDict = new Dictionary<string, Color>();
     ReadX3D x3dScript;
+    public List<Annotation> annotationList = new List<Annotation>();
 
     class CharacteristicItem
     {
@@ -64,9 +65,18 @@ public class ReadQIF : MonoBehaviour
 
     }
 
+
     void Start()
     {
-        x3dScript = gameObject.GetComponent<ReadX3D>();
+        try
+        {
+            x3dScript = gameObject.GetComponent<ReadX3D>();
+        }
+        catch
+        {
+            Debug.LogError("Unable to find the ReadX3D.cs script.");
+        }
+        
 
         string filePath = Application.streamingAssetsPath + "/QIF/" + qifFile;
         characteristicItemList = new List<CharacteristicItem>();
@@ -220,25 +230,10 @@ public class ReadQIF : MonoBehaviour
         return characteristicActual;
     }
 
-    void DisplayData()
-    {
-        for (int i = 0; i < characteristicItemList.Count; i++)
-        {
-            for (int j = 0; j < characteristicActualList.Count; j++)
-                if (characteristicItemList[i].Id == characteristicActualList[j].CharacteristicItemId)
-                {
-                    Debug.Log(characteristicItemList[i].ToString() + "\n" +
-                              characteristicActualList[j].ToString());
-                }
-        }
-    }
-
     public void HighlightResults()
     {
         GenerateDictionary();
         AssignColors();
-
-        //DisplayData();
 
         GameObject parent = this.gameObject;
 
@@ -274,24 +269,24 @@ public class ReadQIF : MonoBehaviour
 
                 if (assignedColor.Value.g == 0)
                 {
-                    annotationDict[assignedColor.Key].transform.SetParent(failsObject.transform);
+                    annotationDict[assignedColor.Key].annotationObject.transform.SetParent(failsObject.transform);
                 }
                 else if (assignedColor.Value.r == 0)
                 {
-                    annotationDict[assignedColor.Key].transform.SetParent(passesObject.transform);
+                    annotationDict[assignedColor.Key].annotationObject.transform.SetParent(passesObject.transform);
                 }
                 else
                 {
-                    annotationDict[assignedColor.Key].transform.SetParent(inconclusiveObject.transform);
+                    annotationDict[assignedColor.Key].annotationObject.transform.SetParent(inconclusiveObject.transform);
                 }
 
-                annotationDict[assignedColor.Key].transform.localPosition = new Vector3(0, 0, 0);
-                annotationDict[assignedColor.Key].transform.localScale = new Vector3(1, 1, 1);
-                annotationDict[assignedColor.Key].transform.localRotation = new Quaternion(0, 0, 0, 0);
+                annotationDict[assignedColor.Key].annotationObject.transform.localPosition = new Vector3(0, 0, 0);
+                annotationDict[assignedColor.Key].annotationObject.transform.localScale = new Vector3(1, 1, 1);
+                annotationDict[assignedColor.Key].annotationObject.transform.localRotation = new Quaternion(0, 0, 0, 0);
 
                 try
                 {
-                    annotationDict[assignedColor.Key].gameObject.GetComponent<MeshRenderer>().material.color = assignedColor.Value;
+                    annotationDict[assignedColor.Key].annotationObject.gameObject.GetComponent<MeshRenderer>().material.color = assignedColor.Value;
                 }
                 catch (Exception e)
                 {
@@ -313,12 +308,22 @@ public class ReadQIF : MonoBehaviour
                 if (x3dScript.annotationList[i].name.ToUpper().Contains(split[0])
                     && !annotationDict.ContainsKey(characteristicItemList[j].Name))
                 {
-                    GameObject annotation = x3dScript.annotationList[i].annotationObject;
-                    GameObject newAnnotationInstance = Instantiate(annotation, annotation.transform.position, annotation.transform.rotation);
-                    newAnnotationInstance.transform.localScale = new Vector3(1, 1, 1);
-                    newAnnotationInstance.name = "QIF Annotation " + characteristicItemList[j].Name;
+                    GameObject x3dAnnotation = x3dScript.annotationList[i].annotationObject;
+                    GameObject newAnnotationInstance = Instantiate(x3dAnnotation, x3dAnnotation.transform.position, x3dAnnotation.transform.rotation);
+                    
+                    
+                    Annotation qifAnnoatation = new Annotation(characteristicItemList[j].Id, "qif annotation", characteristicItemList[j].Name, newAnnotationInstance);
+                    annotationList.Add(qifAnnoatation);
+                    
+                    if(x3dScript.annotationList[i].surface != null)
+                    {
+                        qifAnnoatation.SetSurface(x3dScript.annotationList[i].surface);
+                    }
 
-                    annotationDict.Add(characteristicItemList[j].Name, newAnnotationInstance);
+                    newAnnotationInstance.transform.localScale = new Vector3(1, 1, 1);
+                    newAnnotationInstance.name = qifAnnoatation.id + " | " + qifAnnoatation.description + " | " + qifAnnoatation.name;
+
+                    annotationDict.Add(characteristicItemList[j].Name, qifAnnoatation);
                 }
             }
         }

@@ -5,64 +5,88 @@ using UnityEngine;
 public class AnnotationTrigger : MonoBehaviour
 {
     ReadX3D x3dScript;
+    ReadQIF qifScript;
+    List<Annotation> annotationList = new List<Annotation>();
     // Start is called before the first frame update
     void Start()
     {
-        GameObject view = this.gameObject.transform.parent.parent.gameObject;
+        GameObject parentObject;
+        string[] splitName = this.gameObject.name.Split('|');
+        if(splitName.Length > 2 && splitName[1].Trim() == "qif annotation")
+            parentObject = this.gameObject.transform.parent.parent.parent.gameObject;
+        else
+            parentObject = this.gameObject.transform.parent.parent.gameObject;
 
-        x3dScript = view.GetComponent<ReadX3D>();
+        try
+        {
+            x3dScript = parentObject.GetComponent<ReadX3D>();
+        }
+        catch
+        {
+            Debug.LogError("Unable to find the ReadX3D.cs script.");
+        }
+
+        try
+        {
+            qifScript = parentObject.GetComponent<ReadQIF>();
+        }
+        catch
+        {
+            Debug.LogError("Unable to find the ReadQIF.cs script.");
+        }
+
+        if (splitName.Length > 2 && splitName[1].Trim() == "qif annotation")
+        {
+            annotationList = qifScript.annotationList;
+        }
+        else
+        {
+            annotationList = x3dScript.annotationList;
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
     private void OnMouseDown()
     {
+        List<int> indexes = new List<int>();
         Debug.Log("TRIGGERED " + this.gameObject.name);
 
 
         string[] splitName = this.gameObject.name.Split('|');
-        //int index = -1;
-        List<int> indexes = new List<int>();
+        
         if (splitName.Length > 2)
             indexes = FindAnnotations(splitName[2]);
         else if (splitName.Length == 1)
             indexes = FindSurfaces(splitName[0]);
 
+        //TODO: fix this. In QIF multiple annotations use the same reference for a surface. This gives errors.
         foreach (int index in indexes)
         {
-            /*if(x3dScript.annotationList[index].surface.GetComponent<MeshRenderer>().material.shader == Shader.Find("Unlit/Color"))
+            if (annotationList[index].surface != null)
             {
-                x3dScript.annotationList[index].surface.GetComponent<MeshRenderer>().material.shader = Shader.Find("Standard");
-            }
-            else
-            {
-                x3dScript.annotationList[index].surface.GetComponent<MeshRenderer>().material.shader = Shader.Find("Unlit/Color");
-            }*/
-            if(x3dScript.annotationList[index].surface != null)
-                if (x3dScript.annotationList[index].surface.GetComponent<MeshRenderer>().material.renderQueue == 3000)
+                if (annotationList[index].surface.GetComponent<MeshRenderer>().material.renderQueue != 1)
                 {
-                    x3dScript.annotationList[index].surface.GetComponent<MeshRenderer>().material.renderQueue = 1;
-
                     ShowAnnotations();
                 }
                 else
                 {
-                    x3dScript.annotationList[index].surface.GetComponent<MeshRenderer>().material.renderQueue = 3000;
-
                     HideAnnotations(index);
                 }
-            //x3dScript.annotationList[index].surface.GetComponent<MeshRenderer>().material.SetOverrideTag("RenderType", "Cutout");
+            }
         }
     }
+
     List<int> FindAnnotations(string annotationName)
     {
         List<int> indexes = new List<int>();
-        for (int i = 0; i < x3dScript.annotationList.Count; i++)
+
+        for (int i = 0; i < annotationList.Count; i++)
         {
-            if (x3dScript.annotationList[i].name.ToUpper().Trim() == annotationName.ToUpper().Trim())
+            if (annotationList[i].name.ToUpper().Split('.')[0].Trim() == annotationName.ToUpper().Split('.')[0].Trim())
             {
                 indexes.Add(i);
             }
@@ -73,13 +97,16 @@ public class AnnotationTrigger : MonoBehaviour
     List<int> FindSurfaces(string annotationName)
     {
         List<int> indexes = new List<int>();
-        for (int i = 0; i < x3dScript.annotationList.Count; i++)
+        for (int i = 0; i < annotationList.Count; i++)
         {
-            if (x3dScript.annotationList[i].surface != null)
-                if (x3dScript.annotationList[i].surface.gameObject.name.ToUpper().Trim() == annotationName.ToUpper().Trim())
+            if (annotationList[i].surface != null)
+            {
+                if (annotationList[i].surface.gameObject.name.ToUpper().Trim() == annotationName.ToUpper().Trim())
                 {
                     indexes.Add(i);
                 }
+            }
+                
         }
 
         return indexes;
@@ -87,24 +114,41 @@ public class AnnotationTrigger : MonoBehaviour
 
     void HideAnnotations(int exceptionIndex)
     {
-        for (int i = 0; i < x3dScript.annotationList.Count; i++)
+        //Debug.Log("Hiding annotations.");
+        for (int i = 0; i < annotationList.Count; i++)
         {
             if (i != exceptionIndex)
             {
-                x3dScript.annotationList[i].annotationObject.SetActive(false);
-                //annotationList[i].surface.SetActive(false);
-                if(x3dScript.annotationList[i].surface != null)
-                    x3dScript.annotationList[i].surface.GetComponent<MeshRenderer>().material.renderQueue = 1;
-            }
+                annotationList[i].annotationObject.SetActive(false);
 
+                if(annotationList[i].surface != null)
+                {
+                    annotationList[i].surface.GetComponent<MeshRenderer>().material.renderQueue = 1;
+                }
+            }
+            else
+            {
+                if (annotationList[i].surface != null)
+                {
+                    annotationList[i].surface.GetComponent<MeshRenderer>().material.renderQueue = 2000;                  
+                }
+                else
+                    Debug.Log("No surface.");
+            }
         }
     }
 
     void ShowAnnotations()
     {
-        for (int i = 0; i < x3dScript.annotationList.Count; i++)
+        //Debug.Log("Showing annotations.");
+        for (int i = 0; i < annotationList.Count; i++)
         {
-            x3dScript.annotationList[i].annotationObject.SetActive(true);
+            annotationList[i].annotationObject.SetActive(true);
+            if (annotationList[i].surface != null)
+            {
+                annotationList[i].surface.GetComponent<MeshRenderer>().material.renderQueue = 1;
+            }
+                
         }
     }
 }
