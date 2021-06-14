@@ -184,7 +184,12 @@ public class ReadX3D : MonoBehaviour
                 geometry.AddComponent<MeshCollider>();
                 geometry.AddComponent<AnnotationTrigger>();
             }
-            
+            else if(parentSwitchId == "geometrySwitch")
+            {
+                geometry.GetComponent<MeshRenderer>().material.renderQueue = 2000;
+            }
+
+
 
             ResetTransform(geometry);
 
@@ -202,8 +207,8 @@ public class ReadX3D : MonoBehaviour
 
             }
 
-            if (saveMeshes)
-                SaveMesh(combinedMesh, "Test");
+            //if (saveMeshes)
+                //SaveMesh(combinedMesh, "Test");
         }
     }
 
@@ -605,7 +610,7 @@ public class ReadX3D : MonoBehaviour
         }
     }
 
-    void SaveMesh(Mesh mesh, string name)
+    /*void SaveMesh(Mesh mesh, string name)
     {
         string folderName = "SavedMeshes";
         string path = "Assets/StreamingAssets";
@@ -624,5 +629,5 @@ public class ReadX3D : MonoBehaviour
         //AssetDatabase.CreateAsset(mesh, path + "/" + folderName + "/" + name + assetIncrement + ".asset");
         AssetDatabase.CreateAsset(mesh, "Assets/Test/" + name + assetIncrement + ".asset");
         assetIncrement++;
-    }
+    }*/
 }

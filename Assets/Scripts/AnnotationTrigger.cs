@@ -7,12 +7,11 @@ public class AnnotationTrigger : MonoBehaviour
     ReadX3D x3dScript;
     ReadQIF qifScript;
     List<Annotation> annotationList = new List<Annotation>();
-    // Start is called before the first frame update
     void Start()
     {
         GameObject parentObject;
         string[] splitName = this.gameObject.name.Split('|');
-        if(splitName.Length > 2 && splitName[1].Trim() == "qif annotation")
+        if (splitName.Length > 2 && splitName[1].Trim() == "qif annotation")
             parentObject = this.gameObject.transform.parent.parent.parent.gameObject;
         else
             parentObject = this.gameObject.transform.parent.parent.gameObject;
@@ -23,6 +22,7 @@ public class AnnotationTrigger : MonoBehaviour
         }
         catch
         {
+            x3dScript = null;
             Debug.LogError("Unable to find the ReadX3D.cs script.");
         }
 
@@ -32,14 +32,15 @@ public class AnnotationTrigger : MonoBehaviour
         }
         catch
         {
+            qifScript = null;
             Debug.LogError("Unable to find the ReadQIF.cs script.");
         }
 
-        if (splitName.Length > 2 && splitName[1].Trim() == "qif annotation")
+        if (splitName.Length > 2 && splitName[1].Trim() == "qif annotation" && qifScript != null)
         {
             annotationList = qifScript.annotationList;
         }
-        else
+        else if (x3dScript != null)
         {
             annotationList = x3dScript.annotationList;
         }
@@ -48,16 +49,35 @@ public class AnnotationTrigger : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Input.touchCount > 0)
+        {
 
+            if (Input.GetTouch(0).phase == TouchPhase.Began)
+            {
+                //print("Touch has Began");
+            }
+            if (Input.GetTouch(0).phase == TouchPhase.Ended)
+            {
+                Ray raycast = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
+                RaycastHit raycastHit;
+                if (Physics.Raycast(raycast, out raycastHit))
+                {
+                    if (raycastHit.collider.name == this.gameObject.name)
+                    {
+                        this.OnMouseDown();    
+                    }
+                }
+            }
+        }
     }
-    private void OnMouseDown()
+    private void OnMouseDown() //OnMouseDown
     {
         List<int> indexes = new List<int>();
         Debug.Log("TRIGGERED " + this.gameObject.name);
 
 
         string[] splitName = this.gameObject.name.Split('|');
-        
+
         if (splitName.Length > 2)
             indexes = FindAnnotations(splitName[2]);
         else if (splitName.Length == 1)
@@ -106,7 +126,7 @@ public class AnnotationTrigger : MonoBehaviour
                     indexes.Add(i);
                 }
             }
-                
+
         }
 
         return indexes;
@@ -114,23 +134,25 @@ public class AnnotationTrigger : MonoBehaviour
 
     void HideAnnotations(int exceptionIndex)
     {
-        //Debug.Log("Hiding annotations.");
+        Debug.Log("Hiding annotations.");
         for (int i = 0; i < annotationList.Count; i++)
         {
             if (i != exceptionIndex)
             {
                 annotationList[i].annotationObject.SetActive(false);
 
-                if(annotationList[i].surface != null)
+                if (annotationList[i].surface != null)
                 {
                     annotationList[i].surface.GetComponent<MeshRenderer>().material.renderQueue = 1;
+                    annotationList[i].surface.GetComponent<MeshRenderer>().enabled = false;
                 }
             }
             else
             {
                 if (annotationList[i].surface != null)
                 {
-                    annotationList[i].surface.GetComponent<MeshRenderer>().material.renderQueue = 2000;                  
+                    annotationList[i].surface.GetComponent<MeshRenderer>().material.renderQueue = 2000;
+                    annotationList[i].surface.GetComponent<MeshRenderer>().enabled = true;
                 }
                 else
                     Debug.Log("No surface.");
@@ -140,15 +162,16 @@ public class AnnotationTrigger : MonoBehaviour
 
     void ShowAnnotations()
     {
-        //Debug.Log("Showing annotations.");
+        Debug.Log("Showing annotations.");
         for (int i = 0; i < annotationList.Count; i++)
         {
             annotationList[i].annotationObject.SetActive(true);
             if (annotationList[i].surface != null)
             {
                 annotationList[i].surface.GetComponent<MeshRenderer>().material.renderQueue = 1;
+                annotationList[i].surface.GetComponent<MeshRenderer>().enabled = false;
             }
-                
+
         }
     }
 }
