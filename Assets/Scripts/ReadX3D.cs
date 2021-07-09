@@ -62,7 +62,7 @@ public class ReadX3D : MonoBehaviour
     /* Description: Creates and returns a GameObject for each <Switch> element */
     GameObject ParseSwitchNode(XmlNode switchNode)
     {
-        XmlNodeList groupList;
+        XmlNodeList groupList, transformList;
         string switchId = "Switch";
 
         if(switchNode.Attributes["id"] != null)
@@ -84,6 +84,12 @@ public class ReadX3D : MonoBehaviour
             //ResetTransform(groupObject);
 
             ParseGroupNode(groupNode, viewObject, switchId); // (x, groupObject)
+        }
+
+        transformList = switchNode.SelectNodes("Transform");
+        foreach(XmlNode transformNode in transformList)
+        {
+            ParseTransformNode(transformNode, viewObject, switchId);
         }
 
         return viewObject;
@@ -205,11 +211,58 @@ public class ReadX3D : MonoBehaviour
                     annotationList[index].SetSurface(geometry);
                 }
 
+                /*List<int> indexes = FindAnnotations(geometry.name);
+                foreach(int index in indexes)
+                {
+                    annotationList[index].SetSurface(geometry);
+                }*/
+
             }
 
             //if (saveMeshes)
                 //SaveMesh(combinedMesh, "Test");
         }
+    }
+
+    /* 
+     * TODO: use attributes in transform element?
+     * 
+     */
+    void ParseTransformNode(XmlNode transformNode, GameObject viewObject, string parentSwitchId)
+    {
+        XmlNodeList shapeList, groupList, switchList;
+        string scaleStr = "";
+        Vector3 scale;
+
+        if (transformNode.Attributes["scale"] != null)
+            scaleStr = transformNode.Attributes["scale"].Value;
+
+        scale = StringToVector3(scaleStr);
+
+        shapeList = transformNode.SelectNodes("Shape");
+        foreach(XmlNode shapeNode in shapeList)
+        {
+            ParseShapeNode(shapeNode);
+        }
+
+        groupList = transformNode.SelectNodes("Group");
+        foreach(XmlNode groupNode in groupList)
+        {
+            ParseGroupNode(groupNode, viewObject, parentSwitchId);
+        }
+
+        switchList = transformNode.SelectNodes("Switch");
+        foreach(XmlNode switchNode in switchList)
+        {
+            GameObject nestedViewObject = ParseSwitchNode(switchNode);
+            nestedViewObject.transform.SetParent(this.gameObject.transform);
+            ResetTransform(nestedViewObject);
+
+            nestedViewObject.transform.localScale = scale;
+        }
+
+        viewObject.transform.localScale = scale;
+        print("Setting scale of " + viewObject.name + " to " + scale.x);
     }
 
     /* <Shape> Description
@@ -530,7 +583,22 @@ public class ReadX3D : MonoBehaviour
         return array;
     }
 
-    public int FindAnnotation(string annotationName)
+    Vector3 StringToVector3(string input)
+    {
+        Vector3 vec3 = new Vector3(1, 1, 1);
+
+        string[] sArray = input.Split(' ');
+        if(sArray.Length == 3)
+        {
+            vec3 = new Vector3(float.Parse(sArray[0]),
+                               float.Parse(sArray[1]),
+                               float.Parse(sArray[2]));
+        }
+            
+        return vec3;
+    }
+
+    /*public int FindAnnotation(string annotationName)
     {
         for(int i=0; i<annotationList.Count; i++)
         {
@@ -538,6 +606,22 @@ public class ReadX3D : MonoBehaviour
             {
                 return i;
             }      
+        }
+
+        return -1;
+    }*/
+
+    int FindAnnotation(string annotationName)
+    {
+        List<int> indexes = new List<int>();
+
+        for (int i = 0; i < annotationList.Count; i++)
+        {
+            if (annotationList[i].name.ToUpper().Trim() == annotationName.ToUpper().Trim())
+            {
+                //indexes.Add(i);
+                return i;
+            }
         }
 
         return -1;
@@ -556,7 +640,6 @@ public class ReadX3D : MonoBehaviour
         }
         else
         {
-            //TODO: display error message?
             color = new Color(1, 1, 1);
         }
 
@@ -576,8 +659,9 @@ public class ReadX3D : MonoBehaviour
         {
             for (int j = i + 1; j < materialList.Count; j++)
             {
-                if (materialList[i].color != materialList[j].color)
-                    return true;
+                if(materialList[i] != null && materialList[j] != null)
+                    if (materialList[i].color != materialList[j].color)
+                        return true;
             }
         }
         return false;
@@ -609,25 +693,4 @@ public class ReadX3D : MonoBehaviour
 
         }
     }
-
-    /*void SaveMesh(Mesh mesh, string name)
-    {
-        string folderName = "SavedMeshes";
-        string path = "Assets/StreamingAssets";
-        //Check if folder exists, if not, create it
-        if (!AssetDatabase.IsValidFolder(path + "/" + folderName))
-        {
-            string guid = AssetDatabase.CreateFolder(path, folderName); //TODO: test more
-            //Debug.Log("Assets/" + Application.streamingAssetsPath);
-            if (guid != "")
-                Debug.Log(guid);
-            else
-                Debug.Log("Failed to create SavedMeshes folder.");
-
-        }
-
-        //AssetDatabase.CreateAsset(mesh, path + "/" + folderName + "/" + name + assetIncrement + ".asset");
-        AssetDatabase.CreateAsset(mesh, "Assets/Test/" + name + assetIncrement + ".asset");
-        assetIncrement++;
-    }*/
 }

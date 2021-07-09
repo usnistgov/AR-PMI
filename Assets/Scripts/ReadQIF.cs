@@ -85,6 +85,8 @@ public class ReadQIF : MonoBehaviour
         string xml = ReadXML(filePath);
         ParseQIF(xml);
 
+        GenerateDictionary();
+        AssignColors();
         HighlightResults();
 
     }
@@ -232,9 +234,6 @@ public class ReadQIF : MonoBehaviour
 
     public void HighlightResults()
     {
-        GenerateDictionary();
-        AssignColors();
-
         GameObject parent = this.gameObject;
 
         GameObject qifObject = new GameObject("QIF");
@@ -246,21 +245,16 @@ public class ReadQIF : MonoBehaviour
 
         GameObject failsObject = new GameObject("Fails");
         failsObject.transform.SetParent(qifObject.transform);
-        failsObject.transform.localScale = new Vector3(1, 1, 1);
-        failsObject.transform.localPosition = new Vector3(0, 0, 0);
-        failsObject.transform.rotation = new Quaternion(0, 0, 0, 0);
+        HelperFunctions.ResetTransform(failsObject);
+
 
         GameObject passesObject = new GameObject("Passes");
         passesObject.transform.SetParent(qifObject.transform);
-        passesObject.transform.localScale = new Vector3(1, 1, 1);
-        passesObject.transform.localPosition = new Vector3(0, 0, 0);
-        passesObject.transform.rotation = new Quaternion(0, 0, 0, 0);
+        HelperFunctions.ResetTransform(passesObject);
 
         GameObject inconclusiveObject = new GameObject("Inconclusive");
         inconclusiveObject.transform.SetParent(qifObject.transform);
-        inconclusiveObject.transform.localScale = new Vector3(1, 1, 1);
-        inconclusiveObject.transform.localPosition = new Vector3(0, 0, 0);
-        inconclusiveObject.transform.rotation = new Quaternion(0, 0, 0, 0);
+        HelperFunctions.ResetTransform(inconclusiveObject);
 
         foreach (KeyValuePair<string, Color> assignedColor in colorDict)
         {
@@ -280,9 +274,10 @@ public class ReadQIF : MonoBehaviour
                     annotationDict[assignedColor.Key].annotationObject.transform.SetParent(inconclusiveObject.transform);
                 }
 
-                annotationDict[assignedColor.Key].annotationObject.transform.localPosition = new Vector3(0, 0, 0);
-                annotationDict[assignedColor.Key].annotationObject.transform.localScale = new Vector3(1, 1, 1);
-                annotationDict[assignedColor.Key].annotationObject.transform.localRotation = new Quaternion(0, 0, 0, 0);
+                //annotationDict[assignedColor.Key].annotationObject.transform.localPosition = new Vector3(0, 0, 0);
+                //annotationDict[assignedColor.Key].annotationObject.transform.localScale = new Vector3(1, 1, 1);
+                //annotationDict[assignedColor.Key].annotationObject.transform.localRotation = new Quaternion(0, 0, 0, 0);
+                HelperFunctions.ResetTransform(annotationDict[assignedColor.Key].annotationObject);
 
                 try
                 {
@@ -331,6 +326,7 @@ public class ReadQIF : MonoBehaviour
 
     void AssignColors()
     {
+        Color color = new Color(1, 1, 1);
         for (int i = 0; i < characteristicItemList.Count; i++)
         {
             int passCount = 0, failCount = 0;
@@ -346,10 +342,17 @@ public class ReadQIF : MonoBehaviour
                 }
             }
 
-            float red = 2 * ((float)failCount / (float)(passCount + failCount));
-            float green = 2 * ((float)passCount / (float)(passCount + failCount));
+            //float red = 2 * ((float)failCount / (float)(passCount + failCount));
+            //float green = 2 * ((float)passCount / (float)(passCount + failCount));
 
-            Color color = new Color(red, green, 0);
+            if (passCount == 0)
+                color = new Color(1, 0, 0);
+            else if (failCount == 0)
+                color = new Color(0, 1, 0);
+            else
+                color = new Color(1, 1, 0);
+
+
 
             colorDict.Add(characteristicItemList[i].Name, color);
 

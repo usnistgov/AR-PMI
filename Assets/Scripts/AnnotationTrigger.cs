@@ -46,7 +46,6 @@ public class AnnotationTrigger : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (Input.touchCount > 0)
@@ -70,12 +69,11 @@ public class AnnotationTrigger : MonoBehaviour
             }
         }
     }
-    private void OnMouseDown() //OnMouseDown
+    private void OnMouseDown()
     {
         List<int> indexes = new List<int>();
+
         Debug.Log("TRIGGERED " + this.gameObject.name);
-
-
         string[] splitName = this.gameObject.name.Split('|');
 
         if (splitName.Length > 2)
@@ -171,7 +169,6 @@ public class AnnotationTrigger : MonoBehaviour
                 annotationList[i].surface.GetComponent<MeshRenderer>().material.renderQueue = 1;
                 annotationList[i].surface.GetComponent<MeshRenderer>().enabled = false;
             }
-
         }
     }
 }
