@@ -16,6 +16,7 @@ public class ReadX3D : MonoBehaviour
     public string x3dFile = "NIST_MTC_CRADA_PLATE_REV-A-sfa.x3d";
     public bool flipYZ = true, combineSubmeshes = true, saveMeshes = false, addMeshColliders = true;
     IDictionary<string, string> dictionary = new Dictionary<string, string>();
+    IDictionary<string, Material> matDictionary = new Dictionary<string, Material>();
     public GameObject scaleToTarget;
     int assetIncrement = 0;
     public List<Annotation> annotationList = new List<Annotation>();
@@ -54,8 +55,7 @@ public class ReadX3D : MonoBehaviour
         foreach (XmlNode switchNode in switchList)
         {
             GameObject viewObject = ParseSwitchNode(switchNode);
-            viewObject.transform.SetParent(this.gameObject.transform);
-            ResetTransform(viewObject);
+            
         }
     }
 
@@ -86,11 +86,16 @@ public class ReadX3D : MonoBehaviour
             ParseGroupNode(groupNode, viewObject, switchId); // (x, groupObject)
         }
 
+        viewObject.transform.SetParent(this.gameObject.transform);
+        ResetTransform(viewObject);
+
         transformList = switchNode.SelectNodes("Transform");
         foreach(XmlNode transformNode in transformList)
         {
             ParseTransformNode(transformNode, viewObject, switchId);
         }
+
+        
 
         return viewObject;
     }
@@ -318,12 +323,27 @@ public class ReadX3D : MonoBehaviour
         XmlNode materialNode;
         Material material;
 
+       
+
+        if (appearanceNode.Attributes["USE"] != null)
+        {
+            string use = appearanceNode.Attributes["USE"].Value;
+
+            return  matDictionary[use];
+        }
+
         materialNode = appearanceNode.SelectSingleNode("Material");
 
         if (materialNode != null)
         {
             material = ParseMaterialNode(materialNode);
 
+            if (appearanceNode.Attributes["DEF"] != null)
+            {
+                string def = appearanceNode.Attributes["DEF"].Value;
+                matDictionary.Add(def, material);
+            }
+            
             return material;
         }
 
@@ -537,6 +557,11 @@ public class ReadX3D : MonoBehaviour
                 trianglesList[i + 2] = t;
             }
         }
+
+        //for(int i =0; i< trianglesList.Count; i++)
+        //{
+        //    Debug.Log(trianglesList[i]);
+        //}
 
         Mesh mesh = new Mesh
         {
