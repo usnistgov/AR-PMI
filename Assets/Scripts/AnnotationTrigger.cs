@@ -11,7 +11,7 @@ public class AnnotationTrigger : MonoBehaviour
     {
         GameObject parentObject;
         string[] splitName = this.gameObject.name.Split('|');
-        if (splitName.Length > 2 && splitName[1].Trim() == "qif annotation")
+        if (splitName.Length > 2 && splitName[1].Trim() == "QIF Annotation")
             parentObject = this.gameObject.transform.parent.parent.parent.gameObject;
         else
             parentObject = this.gameObject.transform.parent.parent.gameObject;
@@ -36,7 +36,7 @@ public class AnnotationTrigger : MonoBehaviour
             Debug.LogError("Unable to find the ReadQIF.cs script.");
         }
 
-        if (splitName.Length > 2 && splitName[1].Trim() == "qif annotation" && qifScript != null)
+        if (splitName.Length > 2 && splitName[1].Trim() == "QIF Annotation" && qifScript != null)
         {
             annotationList = qifScript.annotationList;
         }
@@ -73,7 +73,7 @@ public class AnnotationTrigger : MonoBehaviour
     {
         List<int> indexes = new List<int>();
 
-        Debug.Log("TRIGGERED " + this.gameObject.name);
+        //Debug.Log("TRIGGERED " + this.gameObject.name);
         string[] splitName = this.gameObject.name.Split('|');
 
         if (splitName.Length > 2)
@@ -119,7 +119,7 @@ public class AnnotationTrigger : MonoBehaviour
         {
             if (annotationList[i].surface != null)
             {
-                if (annotationList[i].surface.gameObject.name.ToUpper().Trim() == annotationName.ToUpper().Trim())
+                if (annotationList[i].surface.name.ToUpper().Trim() == annotationName.ToUpper().Trim())
                 {
                     indexes.Add(i);
                 }

@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
+  m_IndirectSpecularColor: {r: 0.45143515, g: 0.50071764, b: 0.5712122, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -146,6 +146,70 @@ Material:
     m_Colors:
     - _MaterialColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
+--- !u!1 &129644064
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 129644067}
+  - component: {fileID: 129644066}
+  - component: {fileID: 129644065}
+  m_Layer: 0
+  m_Name: Box Assmbly - Plate
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!114 &129644065
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 129644064}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee68dc8867357c843b42edee954758ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  qifFile: 3.0/QIF30_PlateResults_20_samples_May20.qif
+--- !u!114 &129644066
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 129644064}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dcfeddb670157e644903f2891c51410a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lineWidth: 0.5
+  x3dFile: NIST_MTC_CRADA_PLATE_REV-A-sfa.x3d
+  flipYZ: 1
+  combineSubmeshes: 1
+  saveMeshes: 0
+  addMeshColliders: 1
+  scaleToTarget: {fileID: 0}
+--- !u!4 &129644067
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 129644064}
+  m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.0009999999, y: 0.001, z: 0.001}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: -90, y: 90, z: 90}
 --- !u!1 &222366669
 GameObject:
   m_ObjectHideFlags: 0
@@ -277,6 +341,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Navigation:
     m_Mode: 3
+    m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
@@ -691,6 +756,7 @@ Light:
   m_UseColorTemperature: 0
   m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
   m_UseBoundingSphereOverride: 0
+  m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
   m_ShadowAngle: 0
 --- !u!4 &705507995
@@ -1023,7 +1089,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4520672972924549313, guid: 75e607cb739ef9f498940d6d31e593e3, type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4520672972924549313, guid: 75e607cb739ef9f498940d6d31e593e3, type: 3}
       propertyPath: m_LocalScale.x
@@ -1483,15 +1549,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4520672972924549313, guid: 75e607cb739ef9f498940d6d31e593e3, type: 3}
       propertyPath: m_LocalScale.x
-      value: 1
+      value: 0.78740156
       objectReference: {fileID: 0}
     - target: {fileID: 4520672972924549313, guid: 75e607cb739ef9f498940d6d31e593e3, type: 3}
       propertyPath: m_LocalScale.y
-      value: 1
+      value: 0.78740156
       objectReference: {fileID: 0}
     - target: {fileID: 4520672972924549313, guid: 75e607cb739ef9f498940d6d31e593e3, type: 3}
       propertyPath: m_LocalScale.z
-      value: 1
+      value: 0.78740156
       objectReference: {fileID: 0}
     - target: {fileID: 4520672972924549313, guid: 75e607cb739ef9f498940d6d31e593e3, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2402,6 +2468,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Navigation:
     m_Mode: 3
+    m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
@@ -2572,6 +2639,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
+  m_PresetInfoIsWorld: 0
 --- !u!223 &1742522891
 Canvas:
   m_ObjectHideFlags: 0

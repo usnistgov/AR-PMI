@@ -55,6 +55,9 @@ public class ReadX3D : MonoBehaviour
         foreach (XmlNode switchNode in switchList)
         {
             GameObject viewObject = ParseSwitchNode(switchNode);
+
+            viewObject.transform.SetParent(this.gameObject.transform);
+            
             
         }
     }
@@ -75,35 +78,28 @@ public class ReadX3D : MonoBehaviour
         groupList = switchNode.SelectNodes("Group");
         foreach (XmlNode groupNode in groupList)
         {
-            //GameObject groupObject = new GameObject("Group"); //TODO: this causes issues with QIF
-
-            //if (groupNode.Attributes["id"] != null)
-            //    groupObject.name = groupNode.Attributes["id"].Value;
-
-            //groupObject.transform.SetParent(viewObject.transform);
-            //ResetTransform(groupObject);
-
-            ParseGroupNode(groupNode, viewObject, switchId); // (x, groupObject)
+            ParseGroupNode(groupNode, viewObject, switchId);
         }
 
         viewObject.transform.SetParent(this.gameObject.transform);
         ResetTransform(viewObject);
 
         transformList = switchNode.SelectNodes("Transform");
-        foreach(XmlNode transformNode in transformList)
+        foreach (XmlNode transformNode in transformList)
         {
             ParseTransformNode(transformNode, viewObject, switchId);
         }
 
-        
+        //viewObject.transform.SetParent(this.gameObject.transform);
+
+        //ResetTransform(viewObject);
 
         return viewObject;
     }
 
     void ParseGroupNode(XmlNode groupNode, GameObject viewObject, string parentSwitchId)
     {
-        XmlNodeList shapeNodeList, groupNodeList, switchList;
-        GameObject geometry;
+        XmlNodeList shapeNodeList, groupNodeList, switchList, transformNodeList;
         List<CombineInstance> combineList = new List<CombineInstance>();
         List<Material> materialList = new List<Material>();
         string groupId = "Group";
@@ -111,8 +107,6 @@ public class ReadX3D : MonoBehaviour
 
         if (groupNode.Attributes["id"] != null)
             groupId = groupNode.Attributes["id"].Value;
-
-        string[] splitGroupId = groupId.Split('|');
 
         switchList = groupNode.SelectNodes("Switch");
         foreach (XmlNode switchNode in switchList)
@@ -125,15 +119,13 @@ public class ReadX3D : MonoBehaviour
         groupNodeList = groupNode.SelectNodes("Group");
         foreach (XmlNode nestedGroupNode in groupNodeList)
         {
-            /*GameObject groupObject = new GameObject("Group");
-
-            if (nestedGroupNode.Attributes["id"] != null)
-                groupObject.name = nestedGroupNode.Attributes["id"].Value;
-
-            groupObject.transform.SetParent(viewObject.transform);
-            ResetTransform(groupObject);*/
-
             ParseGroupNode(nestedGroupNode, viewObject, parentSwitchId);
+        }
+
+        transformNodeList = groupNode.SelectNodes("Transform");
+        foreach (XmlNode transformNode in transformNodeList)
+        {
+            ParseTransformNode(transformNode, viewObject, parentSwitchId);
         }
 
         shapeNodeList = groupNode.SelectNodes("Shape");
@@ -143,131 +135,174 @@ public class ReadX3D : MonoBehaviour
 
             if (combineSubmeshes)
             {
-                CombineInstance combineInstance = new CombineInstance();
-                materialList.Add(shape.Item1);
-                combineInstance.mesh = shape.Item2;
-                combineInstance.transform = viewObject.transform.localToWorldMatrix;
-                combineList.Add(combineInstance);
-
-                //triangleCount += shape.Item2.triangles.Length;
+                AddToCombineList(combineList, materialList, shape, viewObject);
             }
             else
             {
-                geometry = new GameObject(groupId);
-                geometry.AddComponent<MeshFilter>().mesh = shape.Item2;
-                geometry.AddComponent<MeshRenderer>().material = shape.Item1;
-                geometry.transform.SetParent(viewObject.transform);
-                ResetTransform(geometry);
+                GenerateGeometryObject(groupId, shape, viewObject, Vector3.one, Vector3.zero, new Quaternion(0, 0, 0, 0));
             }
-
         }
-
         if (combineSubmeshes && combineList.Count > 0)
         {
-            Mesh combinedMesh = new Mesh();
-            geometry = new GameObject(groupId);
-
-            if (ContainsDistinct(materialList))
-            {
-                //Don't combine submeshes and use different materials
-                combinedMesh.CombineMeshes(combineList.ToArray(), false);
-                geometry.AddComponent<MeshRenderer>().materials = materialList.ToArray();
-            }
-            else
-            {
-                //Combine submeshes and use a single material
-                combinedMesh.CombineMeshes(combineList.ToArray(), true);
-                geometry.AddComponent<MeshRenderer>().material = materialList[0];
-            }
-
-            //TODO: Unity has a limit to the number of vertices (65534) and triangles a mesh can have. The all annotations view exceeds this. This might be the issue.
-            //Debug.Log("Individual: " + triangleCount + " Combined: " + combinedMesh.triangles.Length);
-            //Debug.Log(combinedMesh.vertices.Length);
-            //combinedMesh.RecalculateNormals();
-
-            geometry.AddComponent<MeshFilter>().mesh = combinedMesh;
-
-            geometry.transform.SetParent(viewObject.transform);
-
-            // ADD MESH COLLIDERS. DO NOT ADD COLLIDERS TO PART GEOMETRY
-            if(addMeshColliders && parentSwitchId != "geometrySwitch")
-            {
-                geometry.AddComponent<MeshCollider>();
-                geometry.AddComponent<AnnotationTrigger>();
-            }
-            else if(parentSwitchId == "geometrySwitch")
-            {
-                geometry.GetComponent<MeshRenderer>().material.renderQueue = 2000;
-            }
-
-
-
-            ResetTransform(geometry);
-
-            if (splitGroupId.Length > 2 && parentSwitchId.Contains("swView")) //TODO: talk to Bob about this. Is this reliable?
-            {
-                annotationList.Add(new Annotation(splitGroupId[0], splitGroupId[1], splitGroupId[2], geometry));
-            }
-            else if (parentSwitchId == "surfaceSwitch") //TODO: talk to Bob about this.
-            {
-                int index = FindAnnotation(geometry.name);
-                if(index != -1)
-                {
-                    annotationList[index].SetSurface(geometry);
-                }
-
-                /*List<int> indexes = FindAnnotations(geometry.name);
-                foreach(int index in indexes)
-                {
-                    annotationList[index].SetSurface(geometry);
-                }*/
-
-            }
-
-            //if (saveMeshes)
-                //SaveMesh(combinedMesh, "Test");
+            GenerateCombinedGeometryObject(groupId, parentSwitchId, materialList, combineList, viewObject, Vector3.one, Vector3.zero, new Quaternion(0, 0, 0, 0));
         }
+
+        //ResetTransform(viewObject);
     }
 
-    /* 
-     * TODO: use attributes in transform element?
-     * 
-     */
     void ParseTransformNode(XmlNode transformNode, GameObject viewObject, string parentSwitchId)
     {
         XmlNodeList shapeList, groupList, switchList;
-        string scaleStr = "";
-        Vector3 scale;
+        List<CombineInstance> combineList = new List<CombineInstance>();
+        List<Material> materialList = new List<Material>();
+        Vector3 scale = new Vector3(1, 1, 1), translation = new Vector3(0, 0, 0);
+        Quaternion rotation = new Quaternion(0, 0, 0, 0);
+        string transformId = "Transform";
+        
 
-        if (transformNode.Attributes["scale"] != null)
-            scaleStr = transformNode.Attributes["scale"].Value;
-
-        scale = StringToVector3(scaleStr);
-
-        shapeList = transformNode.SelectNodes("Shape");
-        foreach(XmlNode shapeNode in shapeList)
+        if (transformNode.Attributes["id"] != null)
         {
-            ParseShapeNode(shapeNode);
+            transformId = transformNode.Attributes["id"].Value;
         }
 
+        if (transformNode.Attributes["scale"] != null)
+        {
+            string scaleStr = transformNode.Attributes["scale"].Value;
+            scale = StringToVector3(scaleStr);
+        }
+
+        if (transformNode.Attributes["rotation"] != null)
+        {
+            string rotationStr = transformNode.Attributes["rotation"].Value;
+            rotation = StringToAxisAngles(rotationStr);
+        }
+
+        if (transformNode.Attributes["translation"] != null)
+        {
+            string translationStr = transformNode.Attributes["translation"].Value;
+            translation = StringToVector3(translationStr);
+        }
+
+
         groupList = transformNode.SelectNodes("Group");
-        foreach(XmlNode groupNode in groupList)
+        foreach (XmlNode groupNode in groupList)
         {
             ParseGroupNode(groupNode, viewObject, parentSwitchId);
         }
 
+        shapeList = transformNode.SelectNodes("Shape");
+        foreach (XmlNode shapeNode in shapeList)
+        {
+            Tuple<Material, Mesh> shape = ParseShapeNode(shapeNode);
+
+            if (combineSubmeshes)
+            {
+                AddToCombineList(combineList, materialList, shape, viewObject);
+            }
+            else
+            {
+                GenerateGeometryObject(transformId, shape, viewObject, scale, translation, rotation);
+            }
+        }
+        if (combineSubmeshes && combineList.Count > 0)
+        {
+            GenerateCombinedGeometryObject(transformId, parentSwitchId, materialList, combineList, viewObject, scale, translation, rotation);
+        }
+
         switchList = transformNode.SelectNodes("Switch");
-        foreach(XmlNode switchNode in switchList)
+        foreach (XmlNode switchNode in switchList)
         {
             GameObject nestedViewObject = ParseSwitchNode(switchNode);
             nestedViewObject.transform.SetParent(this.gameObject.transform);
-            ResetTransform(nestedViewObject);
-
-            nestedViewObject.transform.localScale = scale;
+            ResetTransform(nestedViewObject, scale, translation, rotation);
         }
 
-        viewObject.transform.localScale = scale;
-        print("Setting scale of " + viewObject.name + " to " + scale.x);
+        ResetTransform(viewObject, scale, translation, rotation);
+    }
+
+    void AddToCombineList(List<CombineInstance>combineList, List<Material> materialList, Tuple<Material, Mesh> shape, GameObject viewObject)
+    {
+        CombineInstance combineInstance = new CombineInstance();
+        materialList.Add(shape.Item1);
+        combineInstance.mesh = shape.Item2;
+        combineInstance.transform = viewObject.transform.localToWorldMatrix;
+        combineList.Add(combineInstance);
+    }
+
+    GameObject GenerateGeometryObject(string objectId, Tuple<Material, Mesh> shape, GameObject viewObject, Vector3 scale, Vector3 translation, Quaternion rotation) 
+    {
+        GameObject geometryObject;
+
+        geometryObject = new GameObject(objectId);
+        geometryObject.AddComponent<MeshFilter>().mesh = shape.Item2;
+        geometryObject.AddComponent<MeshRenderer>().material = shape.Item1;
+        geometryObject.transform.SetParent(viewObject.transform);
+
+        ResetTransform(geometryObject, scale, translation, rotation);
+        //viewObject.transform.SetParent(this.gameObject.transform);
+        ResetTransform(viewObject, scale, translation, rotation);
+
+        return geometryObject;
+    }
+
+    GameObject GenerateCombinedGeometryObject(string objectId, string parentSwitchId, List<Material> materialList, List<CombineInstance> combineList, GameObject viewObject, Vector3 scale, Vector3 translation, Quaternion rotation)
+    {
+        GameObject geometryObject;
+        Mesh combinedMesh = new Mesh();
+
+        geometryObject = new GameObject(objectId);
+        string[] splitObjectId = objectId.Split('|');
+
+        if (ContainsDistinct(materialList))
+        {
+            //Don't combine submeshes and use different materials
+            combinedMesh.CombineMeshes(combineList.ToArray(), false);
+            geometryObject.AddComponent<MeshRenderer>().materials = materialList.ToArray();
+        }
+        else
+        {
+            //Combine submeshes and use a single material
+            combinedMesh.CombineMeshes(combineList.ToArray(), true);
+            geometryObject.AddComponent<MeshRenderer>().material = materialList[0];
+        }
+
+        //TODO: Unity has a limit to the number of vertices (65534) and triangles a mesh can have. The all annotations view exceeds this. This might be the issue.
+        //Debug.Log("Individual: " + triangleCount + " Combined: " + combinedMesh.triangles.Length);
+        //Debug.Log(combinedMesh.vertices.Length);
+        //combinedMesh.RecalculateNormals();
+
+        geometryObject.AddComponent<MeshFilter>().mesh = combinedMesh;
+
+        geometryObject.transform.SetParent(viewObject.transform);
+
+        // ADD MESH COLLIDERS. DO NOT ADD COLLIDERS TO PART GEOMETRY
+        if (addMeshColliders && parentSwitchId != "geometrySwitch")
+        {
+            geometryObject.AddComponent<MeshCollider>();
+            geometryObject.AddComponent<AnnotationTrigger>();
+        }
+        else if (parentSwitchId == "geometrySwitch")
+        {
+            geometryObject.GetComponent<MeshRenderer>().material.renderQueue = 2000;
+        }
+
+        ResetTransform(geometryObject, scale, translation, rotation);
+        //viewObject.transform.SetParent(this.gameObject.transform);
+        ResetTransform(viewObject, scale, translation, rotation);
+
+        if (splitObjectId.Length > 2 && parentSwitchId.Contains("swView")) //TODO: talk to Bob about this. Is this reliable?
+        {
+            annotationList.Add(new Annotation(splitObjectId[0], splitObjectId[1], splitObjectId[2], geometryObject));
+        }
+        else if (parentSwitchId == "surfaceSwitch") //TODO: talk to Bob about this.
+        {
+            int index = FindAnnotation(geometryObject.name);
+            if (index != -1)
+            {
+                annotationList[index].SetSurface(geometryObject);
+            }
+        }
+        return geometryObject;
     }
 
     /* <Shape> Description
@@ -321,9 +356,7 @@ public class ReadX3D : MonoBehaviour
     Material ParseAppearanceNode(XmlNode appearanceNode)
     {
         XmlNode materialNode;
-        Material material;
-
-       
+        Material material;    
 
         if (appearanceNode.Attributes["USE"] != null)
         {
@@ -367,7 +400,7 @@ public class ReadX3D : MonoBehaviour
         //TODO: create a custom shader to fix this?
         //use diffuseColor as main color (emissive works better?)
         Color emissiveColor = new Color(0, 0, 0), diffuseColor = new Color(0.8f, 0.8f, 0.8f), specularColor = new Color(0, 0, 0);
-        float shininess = 0.2f, transparency = 0;
+        //float shininess = 0.2f, transparency = 0;
         string emissiveColorString = "";
 
         if (materialNode.Attributes["diffuseColor"] != null)
@@ -388,8 +421,8 @@ public class ReadX3D : MonoBehaviour
         }
         if (materialNode.Attributes["shininess"] != null)
         {
-            string shininessString = materialNode.Attributes["shininess"].Value;
-            shininess = float.Parse(shininessString);
+            //string shininessString = materialNode.Attributes["shininess"].Value;
+            //shininess = float.Parse(shininessString);
         }
 
         Material material;
@@ -608,33 +641,58 @@ public class ReadX3D : MonoBehaviour
         return array;
     }
 
+    /* Description:
+     * Converts a string of 3 numbers separated by spaces to a Vector3. 
+     * If the string can't be parsed in exactly 3 numbers, the function returns a Vector3 with the value 0,0,0.
+     */
     Vector3 StringToVector3(string input)
     {
-        Vector3 vec3 = new Vector3(1, 1, 1);
-
+        Vector3 vec3 = Vector3.zero;
         string[] sArray = input.Split(' ');
         if(sArray.Length == 3)
         {
-            vec3 = new Vector3(float.Parse(sArray[0]),
-                               float.Parse(sArray[1]),
-                               float.Parse(sArray[2]));
+            if(flipYZ)
+            {
+                vec3 = new Vector3(float.Parse(sArray[0]),
+                                   float.Parse(sArray[2]),
+                                   float.Parse(sArray[1]));
+            }
+            else
+            {
+                vec3 = new Vector3(float.Parse(sArray[0]),
+                                   float.Parse(sArray[1]),
+                                   float.Parse(sArray[2]));
+            }
         }
-            
+
         return vec3;
     }
-
-    /*public int FindAnnotation(string annotationName)
+    /* Description:
+     * Converts a string of 4 numbers separated by spaces to a Quaternion. 
+     * If the string can't be parsed in exactly 4 numbers, the function returns a Quaternion with the value 0,0,0,0.
+     */
+    Quaternion StringToAxisAngles(string input)
     {
-        for(int i=0; i<annotationList.Count; i++)
+        Quaternion q = new Quaternion(0, 0, 0, 0);
+        string[] sArray = input.Split(' ');
+        if (sArray.Length == 4)
         {
-            if (annotationList[i].name.ToUpper().Trim() == annotationName.ToUpper().Trim())
+            if (flipYZ)
             {
-                return i;
-            }      
+                q = Quaternion.AngleAxis(float.Parse(sArray[3]) * Mathf.Rad2Deg * -1, new Vector3(float.Parse(sArray[0]) * Mathf.Rad2Deg,
+                                                                                                  float.Parse(sArray[2]) * Mathf.Rad2Deg,
+                                                                                                  float.Parse(sArray[1]) * Mathf.Rad2Deg));
+            }
+            else
+            {
+                q = Quaternion.AngleAxis(float.Parse(sArray[3]) * Mathf.Rad2Deg, new Vector3(float.Parse(sArray[0]) * Mathf.Rad2Deg,
+                                                                                             float.Parse(sArray[1]) * Mathf.Rad2Deg,
+                                                                                             float.Parse(sArray[2]) * Mathf.Rad2Deg));
+            }
         }
 
-        return -1;
-    }*/
+        return q;
+    }
 
     int FindAnnotation(string annotationName)
     {
@@ -671,11 +729,18 @@ public class ReadX3D : MonoBehaviour
         return color;
     }
 
-    void ResetTransform(GameObject gameObject)
+    void ResetTransform(GameObject gameObject, Vector3 scale = new Vector3(), Vector3 position = new Vector3(), Quaternion rotation = new Quaternion())
     {
-        gameObject.transform.localPosition = new Vector3(0, 0, 0);
-        gameObject.transform.localRotation = Quaternion.Euler(0, 0, 0);
-        gameObject.transform.localScale = new Vector3(1, 1, 1);
+        if(scale == Vector3.zero)
+            gameObject.transform.localScale =  Vector3.one;
+        else
+            gameObject.transform.localScale = scale;
+
+        print("SET SCALE OF " + gameObject.name + " TO " + gameObject.transform.localScale.x);
+
+        gameObject.transform.localPosition = position;
+
+        gameObject.transform.rotation = rotation;
     }
     bool ContainsDistinct(List<Material> materialList)
     {

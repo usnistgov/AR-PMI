@@ -307,7 +307,7 @@ public class ReadQIF : MonoBehaviour
                     GameObject newAnnotationInstance = Instantiate(x3dAnnotation, x3dAnnotation.transform.position, x3dAnnotation.transform.rotation);
                     
                     
-                    Annotation qifAnnoatation = new Annotation(characteristicItemList[j].Id, "qif annotation", characteristicItemList[j].Name, newAnnotationInstance);
+                    Annotation qifAnnoatation = new Annotation(characteristicItemList[j].Id, "QIF Annotation", characteristicItemList[j].Name, newAnnotationInstance);
                     annotationList.Add(qifAnnoatation);
                     
                     if(x3dScript.annotationList[i].surface != null)
@@ -351,8 +351,6 @@ public class ReadQIF : MonoBehaviour
                 color = new Color(0, 1, 0);
             else
                 color = new Color(1, 1, 0);
-
-
 
             colorDict.Add(characteristicItemList[i].Name, color);
 

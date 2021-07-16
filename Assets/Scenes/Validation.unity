@@ -289,7 +289,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &107691362
 Transform:
   m_ObjectHideFlags: 0
@@ -666,9 +666,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcfeddb670157e644903f2891c51410a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lineWidth: 0.5
+  lineWidth: 1
   x3dFile: FTC/nist_ctc_01_asme1_ap242-e1-sfa.x3d
-  flipYZ: 1
+  flipYZ: 0
   combineSubmeshes: 1
   saveMeshes: 0
   addMeshColliders: 0
@@ -1349,8 +1349,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcfeddb670157e644903f2891c51410a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lineWidth: 0.5
-  x3dFile: FTC/nist_ftc_08_asme1_rc-sfa.x3d
+  lineWidth: 0.1
+  x3dFile: FTC/nist_ftc_09_asme1_ap242-e1-sfa.x3d
   flipYZ: 1
   combineSubmeshes: 1
   saveMeshes: 0
@@ -1665,7 +1665,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2002798883
 Transform:
   m_ObjectHideFlags: 0
