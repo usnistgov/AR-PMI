@@ -335,9 +335,9 @@ public class ReadQIF : MonoBehaviour
             {
                 if (characteristicActualList[j].CharacteristicItemId == characteristicItemList[i].Id)
                 {
-                    if (characteristicActualList[j].Status == "PASS")
+                    if (characteristicActualList[j].Status == "PASS") // can also be "BASIC_OR_TED"
                         passCount++;
-                    else
+                    else if (characteristicActualList[j].Status == "FAIL")
                         failCount++;
                 }
             }
@@ -345,14 +345,21 @@ public class ReadQIF : MonoBehaviour
             //float red = 2 * ((float)failCount / (float)(passCount + failCount));
             //float green = 2 * ((float)passCount / (float)(passCount + failCount));
 
-            if (passCount == 0)
+            if (passCount == 0 && failCount > 0) // color = RED
+            {
                 color = new Color(1, 0, 0);
-            else if (failCount == 0)
+                Debug.Log("FAIL: " + characteristicItemList[i].Name +  "pass/fails: " + passCount + "/" + failCount + " status: " + characteristicActualList[i].Status);
+
+            }
+            else if (failCount == 0 && passCount > 0) // color = GREED
                 color = new Color(0, 1, 0);
-            else
+            else // color = YELLOW
                 color = new Color(1, 1, 0);
 
-            colorDict.Add(characteristicItemList[i].Name, color);
+            if (!colorDict.ContainsKey(characteristicItemList[i].Name))
+                colorDict.Add(characteristicItemList[i].Name, color);
+            else
+                Debug.Log("Tried to add " + characteristicItemList[i].Name + " to color dictionary, but was already there.");
 
             //Debug.Log("Characterisitc " + characteristicItemList[i].Name + ", ID: " + characteristicItemList[i].Id + ". (FAILS: " + failCount + " / PASSES: " + passCount + ")");
         }
