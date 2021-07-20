@@ -90,10 +90,6 @@ public class ReadX3D : MonoBehaviour
             ParseTransformNode(transformNode, viewObject, switchId);
         }
 
-        //viewObject.transform.SetParent(this.gameObject.transform);
-
-        //ResetTransform(viewObject);
-
         return viewObject;
     }
 
@@ -135,7 +131,7 @@ public class ReadX3D : MonoBehaviour
 
             if (combineSubmeshes)
             {
-                AddToCombineList(combineList, materialList, shape, viewObject);
+                AddToCombineList(combineList, materialList, shape, viewObject, Vector3.one, Vector3.zero, new Quaternion(0, 0, 0, 0));
             }
             else
             {
@@ -197,7 +193,7 @@ public class ReadX3D : MonoBehaviour
 
             if (combineSubmeshes)
             {
-                AddToCombineList(combineList, materialList, shape, viewObject);
+                AddToCombineList(combineList, materialList, shape, viewObject, scale, translation, rotation);
             }
             else
             {
@@ -218,13 +214,18 @@ public class ReadX3D : MonoBehaviour
         }
 
         ResetTransform(viewObject, scale, translation, rotation);
+        //ResetTransformGlobal(viewObject, scale, translation, rotation);
     }
 
-    void AddToCombineList(List<CombineInstance>combineList, List<Material> materialList, Tuple<Material, Mesh> shape, GameObject viewObject)
-    {
+    void AddToCombineList(List<CombineInstance>combineList, List<Material> materialList, Tuple<Material, Mesh> shape, GameObject viewObject, Vector3 scale, Vector3 translation, Quaternion rotation)
+    {      
         CombineInstance combineInstance = new CombineInstance();
         materialList.Add(shape.Item1);
         combineInstance.mesh = shape.Item2;
+
+        viewObject.transform.localScale = scale;
+        viewObject.transform.SetPositionAndRotation(translation, rotation);
+
         combineInstance.transform = viewObject.transform.localToWorldMatrix;
         combineList.Add(combineInstance);
     }
@@ -239,7 +240,6 @@ public class ReadX3D : MonoBehaviour
         geometryObject.transform.SetParent(viewObject.transform);
 
         ResetTransform(geometryObject, scale, translation, rotation);
-        //viewObject.transform.SetParent(this.gameObject.transform);
         ResetTransform(viewObject, scale, translation, rotation);
 
         return geometryObject;
@@ -286,8 +286,10 @@ public class ReadX3D : MonoBehaviour
             geometryObject.GetComponent<MeshRenderer>().material.renderQueue = 2000;
         }
 
-        ResetTransform(geometryObject, scale, translation, rotation);
-        //viewObject.transform.SetParent(this.gameObject.transform);
+        //BIG CHANGE HERE
+        //ResetTransform(geometryObject, scale, translation, rotation);
+        ResetTransformGlobal(geometryObject, scale, translation, rotation);
+
         ResetTransform(viewObject, scale, translation, rotation);
 
         if (splitObjectId.Length > 2 && parentSwitchId.Contains("swView")) //TODO: talk to Bob about this. Is this reliable?
@@ -736,12 +738,23 @@ public class ReadX3D : MonoBehaviour
         else
             gameObject.transform.localScale = scale;
 
-        print("SET SCALE OF " + gameObject.name + " TO " + gameObject.transform.localScale.x);
-
         gameObject.transform.localPosition = position;
 
         gameObject.transform.rotation = rotation;
     }
+
+    void ResetTransformGlobal(GameObject gameObject, Vector3 scale = new Vector3(), Vector3 position = new Vector3(), Quaternion rotation = new Quaternion())
+    {
+        if (scale == Vector3.zero)
+            gameObject.transform.localScale = Vector3.one;
+        else
+            gameObject.transform.localScale = scale;
+
+        gameObject.transform.position = position;
+
+        gameObject.transform.rotation = rotation;
+    }
+
     bool ContainsDistinct(List<Material> materialList)
     {
         //TODO: use different criteria for comparing materials?
