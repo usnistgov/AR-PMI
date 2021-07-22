@@ -638,7 +638,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &659712251
 Transform:
   m_ObjectHideFlags: 0
@@ -719,7 +719,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &792632003
 Transform:
   m_ObjectHideFlags: 0
@@ -1108,7 +1108,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee68dc8867357c843b42edee954758ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  qifFile: Validation/nist_ftc_06_asme1_ap242_w_30_results.QIF
+  qifFile: Validation/nist_ftc_06_asme1_ap242_w_30_results_jul19.QIF
 --- !u!114 &1244286145
 MonoBehaviour:
   m_ObjectHideFlags: 0

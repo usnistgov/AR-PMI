@@ -274,9 +274,6 @@ public class ReadQIF : MonoBehaviour
                     annotationDict[assignedColor.Key].annotationObject.transform.SetParent(inconclusiveObject.transform);
                 }
 
-                //annotationDict[assignedColor.Key].annotationObject.transform.localPosition = new Vector3(0, 0, 0);
-                //annotationDict[assignedColor.Key].annotationObject.transform.localScale = new Vector3(1, 1, 1);
-                //annotationDict[assignedColor.Key].annotationObject.transform.localRotation = new Quaternion(0, 0, 0, 0);
                 HelperFunctions.ResetTransform(annotationDict[assignedColor.Key].annotationObject);
 
                 try
@@ -300,7 +297,10 @@ public class ReadQIF : MonoBehaviour
             {
                 string[] split = characteristicItemList[j].Name.Split('.'); // If WIDTH6.3 -> only look for WIDTH6
 
-                if (x3dScript.annotationList[i].name.ToUpper().Contains(split[0])
+
+                //MATCHING PATTERN: if(X3D annotation name contains QIF CharacteristicItem name)
+                //if (x3dScript.annotationList[i].name.ToUpper().Contains(split[0])
+                if (x3dScript.annotationList[i].name.ToUpper().Contains((split[0] + "." + split[1]).Replace('_', ' '))
                     && !annotationDict.ContainsKey(characteristicItemList[j].Name))
                 {
                     GameObject x3dAnnotation = x3dScript.annotationList[i].annotationObject;
@@ -348,13 +348,13 @@ public class ReadQIF : MonoBehaviour
             if (passCount == 0 && failCount > 0) // color = RED
             {
                 color = new Color(1, 0, 0);
-                Debug.Log("FAIL: " + characteristicItemList[i].Name +  "pass/fails: " + passCount + "/" + failCount + " status: " + characteristicActualList[i].Status);
-
             }
             else if (failCount == 0 && passCount > 0) // color = GREED
                 color = new Color(0, 1, 0);
             else // color = YELLOW
                 color = new Color(1, 1, 0);
+
+            Debug.Log("Characteristic: " + characteristicItemList[i].Name + " pass/fails: " + passCount + "/" + failCount + " status: " + characteristicActualList[i].Status);
 
             if (!colorDict.ContainsKey(characteristicItemList[i].Name))
                 colorDict.Add(characteristicItemList[i].Name, color);
