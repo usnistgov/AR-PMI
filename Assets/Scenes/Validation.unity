@@ -123,6 +123,71 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &6124666
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6124667}
+  - component: {fileID: 6124669}
+  - component: {fileID: 6124668}
+  m_Layer: 0
+  m_Name: nist_ctc_01_asme1_ap242-e1-sfa
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6124667
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6124666}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.99666756, y: 0.38773954, z: -0.21953766}
+  m_LocalScale: {x: 0.01, y: 0.01, z: 0.01}
+  m_Children: []
+  m_Father: {fileID: 659712251}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6124668
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6124666}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee68dc8867357c843b42edee954758ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  qifFile: Validation/nist_ctc_01_asme1_ap242_w_1_result_jul28.QIF
+  showCharacteristicResults: 1
+--- !u!114 &6124669
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6124666}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dcfeddb670157e644903f2891c51410a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lineWidth: 0.5
+  x3dFile: FTC/nist_ctc_01_asme1_ap242-e1-sfa.x3d
+  flipYZ: 1
+  combineSubmeshes: 1
+  saveMeshes: 0
+  addMeshColliders: 0
+  scaleToTarget: {fileID: 0}
 --- !u!1 &8377691
 GameObject:
   m_ObjectHideFlags: 0
@@ -168,6 +233,71 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lineWidth: 0.5
   x3dFile: FTC/nist_ftc_06_asme1_rd-sfa.x3d
+  flipYZ: 1
+  combineSubmeshes: 1
+  saveMeshes: 0
+  addMeshColliders: 0
+  scaleToTarget: {fileID: 0}
+--- !u!1 &37219117
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 37219118}
+  - component: {fileID: 37219120}
+  - component: {fileID: 37219119}
+  m_Layer: 0
+  m_Name: nist_ftc_09_asme1_ap242-e1-sfa
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &37219118
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 37219117}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.99666756, y: 0.38773954, z: -0.21953766}
+  m_LocalScale: {x: 0.01, y: 0.01, z: 0.01}
+  m_Children: []
+  m_Father: {fileID: 659712251}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &37219119
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 37219117}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee68dc8867357c843b42edee954758ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  qifFile: Validation/nist_ftc_09_asme1_ap242_w_1_result_jul28.QIF
+  showCharacteristicResults: 0
+--- !u!114 &37219120
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 37219117}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dcfeddb670157e644903f2891c51410a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lineWidth: 0.03
+  x3dFile: FTC/nist_ftc_09_asme1_ap242-e1-sfa.x3d
   flipYZ: 1
   combineSubmeshes: 1
   saveMeshes: 0
@@ -623,6 +753,71 @@ MonoBehaviour:
   saveMeshes: 0
   addMeshColliders: 0
   scaleToTarget: {fileID: 0}
+--- !u!1 &641696809
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 641696810}
+  - component: {fileID: 641696812}
+  - component: {fileID: 641696811}
+  m_Layer: 0
+  m_Name: nist_ftc_06_asme1_ap242-e1-sfa-1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &641696810
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 641696809}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.99666756, y: 0.38773954, z: -0.21953766}
+  m_LocalScale: {x: 0.01, y: 0.01, z: 0.01}
+  m_Children: []
+  m_Father: {fileID: 659712251}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &641696811
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 641696809}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee68dc8867357c843b42edee954758ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  qifFile: Validation/nist_ftc_06_asme1_ap242_w_1_result_jul19.QIF
+  showCharacteristicResults: 1
+--- !u!114 &641696812
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 641696809}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dcfeddb670157e644903f2891c51410a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lineWidth: 0.5
+  x3dFile: FTC/nist_ftc_06_asme1_ap242-e1-sfa.x3d
+  flipYZ: 1
+  combineSubmeshes: 1
+  saveMeshes: 0
+  addMeshColliders: 0
+  scaleToTarget: {fileID: 0}
 --- !u!1 &659712250
 GameObject:
   m_ObjectHideFlags: 0
@@ -650,7 +845,13 @@ Transform:
   m_LocalPosition: {x: 7.5583105, y: 4.575648, z: 7.2577305}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 6124667}
+  - {fileID: 1539062382}
   - {fileID: 1244286143}
+  - {fileID: 641696810}
+  - {fileID: 844647433}
+  - {fileID: 1281271928}
+  - {fileID: 37219118}
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -914,6 +1115,71 @@ MonoBehaviour:
   saveMeshes: 0
   addMeshColliders: 0
   scaleToTarget: {fileID: 0}
+--- !u!1 &844647432
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 844647433}
+  - component: {fileID: 844647435}
+  - component: {fileID: 844647434}
+  m_Layer: 0
+  m_Name: nist_ctc_05_asme1_ap242-e1-sfa - Different Naming
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &844647433
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 844647432}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.99666756, y: 0.38773954, z: -0.21953766}
+  m_LocalScale: {x: 0.01, y: 0.01, z: 0.01}
+  m_Children: []
+  m_Father: {fileID: 659712251}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &844647434
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 844647432}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee68dc8867357c843b42edee954758ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  qifFile: Validation/nist_ctc_05_asme1_ap242_w_1_result_jul28.QIF
+  showCharacteristicResults: 1
+--- !u!114 &844647435
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 844647432}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dcfeddb670157e644903f2891c51410a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lineWidth: 0.1
+  x3dFile: FTC/nist_ctc_05_asme1_ap242-e1-sfa.x3d
+  flipYZ: 1
+  combineSubmeshes: 1
+  saveMeshes: 0
+  addMeshColliders: 0
+  scaleToTarget: {fileID: 0}
 --- !u!1 &942227568
 GameObject:
   m_ObjectHideFlags: 0
@@ -1076,12 +1342,12 @@ GameObject:
   - component: {fileID: 1244286145}
   - component: {fileID: 1244286144}
   m_Layer: 0
-  m_Name: nist_ftc_06_asme1_ap242-e1-sfa
+  m_Name: nist_ftc_06_asme1_ap242-e1-sfa-30
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1244286143
 Transform:
   m_ObjectHideFlags: 0
@@ -1094,7 +1360,7 @@ Transform:
   m_LocalScale: {x: 0.01, y: 0.01, z: 0.01}
   m_Children: []
   m_Father: {fileID: 659712251}
-  m_RootOrder: 0
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1244286144
 MonoBehaviour:
@@ -1109,6 +1375,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   qifFile: Validation/nist_ftc_06_asme1_ap242_w_30_results_jul19.QIF
+  showCharacteristicResults: 1
 --- !u!114 &1244286145
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1173,6 +1440,71 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lineWidth: 0.5
   x3dFile: FTC/nist_ctc_04_asme1_rd-sfa.x3d
+  flipYZ: 1
+  combineSubmeshes: 1
+  saveMeshes: 0
+  addMeshColliders: 0
+  scaleToTarget: {fileID: 0}
+--- !u!1 &1281271927
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1281271928}
+  - component: {fileID: 1281271930}
+  - component: {fileID: 1281271929}
+  m_Layer: 0
+  m_Name: nist_ftc_08_asme1_ap242-e1-sfa - Different Naming
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &1281271928
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1281271927}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.99666756, y: 0.38773954, z: -0.21953766}
+  m_LocalScale: {x: 0.01, y: 0.01, z: 0.01}
+  m_Children: []
+  m_Father: {fileID: 659712251}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1281271929
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1281271927}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee68dc8867357c843b42edee954758ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  qifFile: Validation/nist_ftc_08_asme1_ap242-1_w_1_result_jul28.QIF
+  showCharacteristicResults: 1
+--- !u!114 &1281271930
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1281271927}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dcfeddb670157e644903f2891c51410a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lineWidth: 0.02
+  x3dFile: FTC/nist_ftc_08_asme1_ap242-e1-sfa.x3d
   flipYZ: 1
   combineSubmeshes: 1
   saveMeshes: 0
@@ -1406,6 +1738,71 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lineWidth: 1
   x3dFile: FTC/nist_ctc_03_asme1_ap242-e2-sfa.x3d
+  flipYZ: 1
+  combineSubmeshes: 1
+  saveMeshes: 0
+  addMeshColliders: 0
+  scaleToTarget: {fileID: 0}
+--- !u!1 &1539062381
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1539062382}
+  - component: {fileID: 1539062384}
+  - component: {fileID: 1539062383}
+  m_Layer: 0
+  m_Name: nist_ctc_03_asme1_ap242-e1-sfa - Incorrect x3d datums?
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &1539062382
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1539062381}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.99666756, y: 0.38773954, z: -0.21953766}
+  m_LocalScale: {x: 0.01, y: 0.01, z: 0.01}
+  m_Children: []
+  m_Father: {fileID: 659712251}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1539062383
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1539062381}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee68dc8867357c843b42edee954758ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  qifFile: Validation/nist_ctc_03_asme1_ap242_w_1_result_jul28.QIF
+  showCharacteristicResults: 1
+--- !u!114 &1539062384
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1539062381}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dcfeddb670157e644903f2891c51410a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lineWidth: 0.5
+  x3dFile: FTC/nist_ctc_03_asme1_ap242-e1-sfa.x3d
   flipYZ: 1
   combineSubmeshes: 1
   saveMeshes: 0

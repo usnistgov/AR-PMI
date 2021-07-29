@@ -10,12 +10,15 @@ using System;
 public class ReadQIF : MonoBehaviour
 {
     public string qifFile = "3.0/QIF30_BoxResults_19_samples_May20.QIF";
+    public bool showCharacteristicResults = true;
     List<CharacteristicItem> characteristicItemList;
     List<CharacteristicActual> characteristicActualList;
     Dictionary<string, Annotation> annotationDict = new Dictionary<string, Annotation>();
     Dictionary<string, Color> colorDict = new Dictionary<string, Color>();
     ReadX3D x3dScript;
     public List<Annotation> annotationList = new List<Annotation>();
+    public List<Annotation> unmatchedX3DAnnotationList = new List<Annotation>();
+    int characteristicItemsNumber = 0;
 
     class CharacteristicItem
     {
@@ -87,8 +90,10 @@ public class ReadQIF : MonoBehaviour
 
         GenerateDictionary();
         AssignColors();
+        Debug.Log("Assigned colors to " + colorDict.Count + "/" + characteristicItemsNumber);
         HighlightResults();
 
+        DisplayUnmatchedAnnotations(); //For validation.
     }
 
     void Update()
@@ -132,9 +137,21 @@ public class ReadQIF : MonoBehaviour
     {
         XmlNodeList characteristicItemsList = characteristicItemsNode.SelectNodes("*"); //direct children
 
+        if (characteristicItemsNode.Attributes["n"] != null)
+        {
+            characteristicItemsNumber = int.Parse(characteristicItemsNode.Attributes["n"].Value);
+            Debug.Log("Number of CharacteristicItems: " + characteristicItemsNumber);
+        }
+            
+
         foreach (XmlNode characteristicItem in characteristicItemsList)
         {
             ParseCharacteristicItem(characteristicItem, xmlnsManager);
+        }
+
+        if(characteristicItemList.Count != characteristicItemsNumber)
+        {
+            Debug.LogError("Warning: characteristicItemsNumber = " + characteristicItemsNumber + " but characteristicItemList.Count = " + characteristicItemList.Count);
         }
     }
 
@@ -287,39 +304,81 @@ public class ReadQIF : MonoBehaviour
             }
         }
 
-
     }
     void GenerateDictionary()
     {
         for (int i = 0; i < x3dScript.annotationList.Count; i++)
         {
+            bool foundMatch = false;
             for (int j = 0; j < characteristicItemList.Count; j++)
             {
-                string[] split = characteristicItemList[j].Name.Split('.'); // If WIDTH6.3 -> only look for WIDTH6
+                
+                string[] split = characteristicItemList[j].Name.Split('.'); // If WIDTH6.3 -> only look for WIDTH6 (for Box assembly and FTC cases)
+                //string[] split = characteristicItemList[j].Name.Replace("__", ".").Replace('_', ' ').Split('.'); // (for FTC 5 and FTC 8)
 
-
-                //MATCHING PATTERN: if(X3D annotation name contains QIF CharacteristicItem name)
-                //if (x3dScript.annotationList[i].name.ToUpper().Contains(split[0])
-                if (x3dScript.annotationList[i].name.ToUpper().Contains((split[0] + "." + split[1]).Replace('_', ' '))
-                    && !annotationDict.ContainsKey(characteristicItemList[j].Name))
-                {
-                    GameObject x3dAnnotation = x3dScript.annotationList[i].annotationObject;
-                    GameObject newAnnotationInstance = Instantiate(x3dAnnotation, x3dAnnotation.transform.position, x3dAnnotation.transform.rotation);
-                    
-                    
-                    Annotation qifAnnoatation = new Annotation(characteristicItemList[j].Id, "QIF Annotation", characteristicItemList[j].Name, newAnnotationInstance);
-                    annotationList.Add(qifAnnoatation);
-                    
-                    if(x3dScript.annotationList[i].surface != null)
+                string noAlfa = "";
+                if(split.Length > 1)
+                    for (int k = 0; k < split[1].Length; k++)
                     {
-                        qifAnnoatation.SetSurface(x3dScript.annotationList[i].surface);
+                        if (char.IsDigit(split[1][k]))
+                            noAlfa += split[1][k];
                     }
 
-                    newAnnotationInstance.transform.localScale = new Vector3(1, 1, 1);
-                    newAnnotationInstance.name = qifAnnoatation.id + " | " + qifAnnoatation.description + " | " + qifAnnoatation.name;
+                //MATCHING PATTERN: if(X3D annotation name contains QIF CharacteristicItem name)
+                //FOR Box Assembly
+                if (x3dScript.annotationList[i].name.ToUpper().Contains(split[0]))
+                //FOR FTC 5 and FTC 8 
+                //if (x3dScript.annotationList[i].name.ToUpper().Contains(split[0] + " (" + noAlfa.Trim() + ")"))
+                //FOR rest of FTC models
+                //if (x3dScript.annotationList[i].name.ToUpper().Contains((split[0] + "." + noAlfa).Replace('_', ' ')))
+                {
+                    foundMatch = true;
+                    Annotation qifAnnoatation = null;
+                    GameObject x3dAnnotation = x3dScript.annotationList[i].annotationObject;
 
-                    annotationDict.Add(characteristicItemList[j].Name, qifAnnoatation);
-                }
+                    GameObject newAnnotationInstance = Instantiate(x3dAnnotation, x3dAnnotation.transform.position, x3dAnnotation.transform.rotation);
+
+                    if (!annotationDict.ContainsKey(characteristicItemList[j].Name))
+                    {
+
+                        qifAnnoatation = new Annotation(characteristicItemList[j].Id, "QIF Annotation", characteristicItemList[j].Name, newAnnotationInstance);
+                        
+                    }
+                    else if(annotationDict[characteristicItemList[j].Name].id != characteristicItemList[j].Id)
+                    {
+                        Debug.Log("Found CharacteristicItem with duplicate name: " + characteristicItemList[j].Name + " , but different id: " + characteristicItemList[j].Id +
+                            ". Renamed to: " + characteristicItemList[j].Name + " (" + characteristicItemList[j].Id + ")");
+
+                        characteristicItemList[j].Name += $" ({characteristicItemList[j].Id})";
+                        qifAnnoatation = new Annotation(characteristicItemList[j].Id, "QIF Annotation", characteristicItemList[j].Name, newAnnotationInstance);
+                    }
+
+                    if(qifAnnoatation != null)
+                    {  
+                        annotationList.Add(qifAnnoatation);
+
+                        if (x3dScript.annotationList[i].surface != null)
+                        {
+                            qifAnnoatation.SetSurface(x3dScript.annotationList[i].surface);
+                        }
+
+                        newAnnotationInstance.transform.localScale = new Vector3(1, 1, 1);
+                        newAnnotationInstance.name = qifAnnoatation.id + " | " + qifAnnoatation.description + " | " + qifAnnoatation.name;
+
+                        annotationDict.Add(characteristicItemList[j].Name, qifAnnoatation);
+                    }
+                    else
+                    {
+                        Destroy(newAnnotationInstance);
+                    }
+                        
+
+                } 
+            }
+            if (!foundMatch)
+            {
+                //FIND X3D ANNOTATIONS THAT DO NOT HAVE A MATCH
+                unmatchedX3DAnnotationList.Add(x3dScript.annotationList[i]);
             }
         }
     }
@@ -354,14 +413,24 @@ public class ReadQIF : MonoBehaviour
             else // color = YELLOW
                 color = new Color(1, 1, 0);
 
-            Debug.Log("Characteristic: " + characteristicItemList[i].Name + " pass/fails: " + passCount + "/" + failCount + " status: " + characteristicActualList[i].Status);
+            if(showCharacteristicResults)
+                Debug.Log("Characteristic: " + characteristicItemList[i].Name + " passes/fails: " + passCount + "/" + failCount + " status: " + characteristicActualList[i].Status);
 
             if (!colorDict.ContainsKey(characteristicItemList[i].Name))
                 colorDict.Add(characteristicItemList[i].Name, color);
             else
-                Debug.Log("Tried to add " + characteristicItemList[i].Name + " to color dictionary, but was already there.");
+            {
+                Debug.LogError("Found CharacteristicItem with duplicate name for colorDict: " + characteristicItemList[i].Name);
 
-            //Debug.Log("Characterisitc " + characteristicItemList[i].Name + ", ID: " + characteristicItemList[i].Id + ". (FAILS: " + failCount + " / PASSES: " + passCount + ")");
+            }
+        }
+    }
+
+    void DisplayUnmatchedAnnotations()
+    {
+        for(int i=0; i< unmatchedX3DAnnotationList.Count; i++)
+        {
+            Debug.Log("Unmatched X3D annotation " + (i+1) + "/" + unmatchedX3DAnnotationList.Count + " - Id: " + unmatchedX3DAnnotationList[i].id + ", Name: " + unmatchedX3DAnnotationList[i].name);
         }
     }
 }
