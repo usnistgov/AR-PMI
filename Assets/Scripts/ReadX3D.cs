@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Xml;
@@ -17,6 +17,7 @@ public class ReadX3D : MonoBehaviour
     public bool flipYZ = true, combineSubmeshes = true, saveMeshes = false;
     IDictionary<string, string> dictionary = new Dictionary<string, string>();
     public GameObject scaleToTarget;
+
     int assetIncrement = 0;
 
 
@@ -125,6 +126,7 @@ public class ReadX3D : MonoBehaviour
             else
             {
                 geometry = new GameObject("Mesh");
+                
                 geometry.AddComponent<MeshFilter>().mesh = shape.Item2;
                 geometry.AddComponent<MeshRenderer>().material = shape.Item1;
                 geometry.transform.SetParent(viewObject.transform);
@@ -162,8 +164,8 @@ public class ReadX3D : MonoBehaviour
             geometry.transform.SetParent(viewObject.transform);
             ResetTransform(geometry);
 
-            if (saveMeshes)
-                SaveMesh(combinedMesh, "Test");
+            //if (saveMeshes)
+            //    SaveMesh(combinedMesh, "Test");
             //return geometry;
         }
         //return null; //TODO: OK?
@@ -545,24 +547,24 @@ public class ReadX3D : MonoBehaviour
         }
     }
 
-    void SaveMesh(Mesh mesh, string name)
-    {
-        string folderName = "SavedMeshes";
-        string path = "Assets/StreamingAssets";
-        //Check if folder exists, if not, create it
-        if (!AssetDatabase.IsValidFolder(path + "/" + folderName))
-        {
-            string guid = AssetDatabase.CreateFolder(path, folderName); //TODO: test more
-            //Debug.Log("Assets/" + Application.streamingAssetsPath);
-            if (guid != "")
-                Debug.Log(guid);
-            else
-                Debug.Log("Failed to create SavedMeshes folder.");
+    // void SaveMesh(Mesh mesh, string name)
+    // {
+    //     string folderName = "SavedMeshes";
+    //     string path = "Assets/StreamingAssets";
+    //     //Check if folder exists, if not, create it
+    //     if (!AssetDatabase.IsValidFolder(path + "/" + folderName))
+    //     {
+    //         string guid = AssetDatabase.CreateFolder(path, folderName); //TODO: test more
+    //         //Debug.Log("Assets/" + Application.streamingAssetsPath);
+    //         if (guid != "")
+    //             Debug.Log(guid);
+    //         else
+    //             Debug.Log("Failed to create SavedMeshes folder.");
 
-        }
+    //     }
 
-        //AssetDatabase.CreateAsset(mesh, path + "/" + folderName + "/" + name + assetIncrement + ".asset");
-        AssetDatabase.CreateAsset(mesh, "Assets/Test/" + name + assetIncrement + ".asset");
-        assetIncrement++;
-    }
+    //     //AssetDatabase.CreateAsset(mesh, path + "/" + folderName + "/" + name + assetIncrement + ".asset");
+    //     AssetDatabase.CreateAsset(mesh, "Assets/Test/" + name + assetIncrement + ".asset");
+    //     assetIncrement++;
+    // }
 }
