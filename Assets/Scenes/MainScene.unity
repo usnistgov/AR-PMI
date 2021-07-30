@@ -177,6 +177,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   qifFile: 3.0/QIF30_PlateResults_20_samples_May20.qif
+  showCharacteristicResults: 1
+  showUnmatchedQIF: 1
+  showUnmatchedX3D: 0
 --- !u!114 &129644066
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -597,6 +600,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   qifFile: 3.0/QIF30_CoverResults_20_samples_May20.QIF
+  showCharacteristicResults: 0
+  showUnmatchedQIF: 1
+  showUnmatchedX3D: 0
 --- !u!114 &497122069
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -661,6 +667,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   qifFile: 3.0/QIF30_BoxResults_19_samples_May20.QIF
+  showCharacteristicResults: 0
+  showUnmatchedQIF: 1
+  showUnmatchedX3D: 0
 --- !u!114 &537520215
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -885,7 +894,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &852507530
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1383,6 +1392,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   qifFile: 3.0/QIF30_PlateResults_20_samples_May20.qif
+  showCharacteristicResults: 0
+  showUnmatchedQIF: 1
+  showUnmatchedX3D: 0
 --- !u!114 &1138326792
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1421,7 +1433,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1322296248
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1549,15 +1561,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4520672972924549313, guid: 75e607cb739ef9f498940d6d31e593e3, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.78740156
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4520672972924549313, guid: 75e607cb739ef9f498940d6d31e593e3, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.78740156
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4520672972924549313, guid: 75e607cb739ef9f498940d6d31e593e3, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.78740156
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4520672972924549313, guid: 75e607cb739ef9f498940d6d31e593e3, type: 3}
       propertyPath: m_LocalPosition.x

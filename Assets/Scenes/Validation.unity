@@ -140,7 +140,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6124667
 Transform:
   m_ObjectHideFlags: 0
@@ -168,7 +168,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   qifFile: Validation/nist_ctc_01_asme1_ap242_w_1_result_jul28.QIF
-  showCharacteristicResults: 1
+  showCharacteristicResults: 0
+  showUnmatchedQIF: 1
+  showUnmatchedX3D: 0
 --- !u!114 &6124669
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -181,7 +183,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcfeddb670157e644903f2891c51410a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lineWidth: 0.5
+  lineWidth: 1
   x3dFile: FTC/nist_ctc_01_asme1_ap242-e1-sfa.x3d
   flipYZ: 1
   combineSubmeshes: 1
@@ -268,7 +270,7 @@ Transform:
   m_LocalScale: {x: 0.01, y: 0.01, z: 0.01}
   m_Children: []
   m_Father: {fileID: 659712251}
-  m_RootOrder: 6
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &37219119
 MonoBehaviour:
@@ -284,6 +286,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   qifFile: Validation/nist_ftc_09_asme1_ap242_w_1_result_jul28.QIF
   showCharacteristicResults: 0
+  showUnmatchedQIF: 1
+  showUnmatchedX3D: 0
 --- !u!114 &37219120
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -798,7 +802,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   qifFile: Validation/nist_ftc_06_asme1_ap242_w_1_result_jul19.QIF
-  showCharacteristicResults: 1
+  showCharacteristicResults: 0
+  showUnmatchedQIF: 1
+  showUnmatchedX3D: 0
 --- !u!114 &641696812
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -849,9 +855,9 @@ Transform:
   - {fileID: 1539062382}
   - {fileID: 1244286143}
   - {fileID: 641696810}
+  - {fileID: 37219118}
   - {fileID: 844647433}
   - {fileID: 1281271928}
-  - {fileID: 37219118}
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1132,7 +1138,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &844647433
 Transform:
   m_ObjectHideFlags: 0
@@ -1145,7 +1151,7 @@ Transform:
   m_LocalScale: {x: 0.01, y: 0.01, z: 0.01}
   m_Children: []
   m_Father: {fileID: 659712251}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &844647434
 MonoBehaviour:
@@ -1160,7 +1166,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   qifFile: Validation/nist_ctc_05_asme1_ap242_w_1_result_jul28.QIF
-  showCharacteristicResults: 1
+  showCharacteristicResults: 0
+  showUnmatchedQIF: 1
+  showUnmatchedX3D: 0
 --- !u!114 &844647435
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1375,7 +1383,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   qifFile: Validation/nist_ftc_06_asme1_ap242_w_30_results_jul19.QIF
-  showCharacteristicResults: 1
+  showCharacteristicResults: 0
+  showUnmatchedQIF: 1
+  showUnmatchedX3D: 0
 --- !u!114 &1244286145
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1475,7 +1485,7 @@ Transform:
   m_LocalScale: {x: 0.01, y: 0.01, z: 0.01}
   m_Children: []
   m_Father: {fileID: 659712251}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1281271929
 MonoBehaviour:
@@ -1490,7 +1500,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   qifFile: Validation/nist_ftc_08_asme1_ap242-1_w_1_result_jul28.QIF
-  showCharacteristicResults: 1
+  showCharacteristicResults: 0
+  showUnmatchedQIF: 1
+  showUnmatchedX3D: 0
 --- !u!114 &1281271930
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1788,7 +1800,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   qifFile: Validation/nist_ctc_03_asme1_ap242_w_1_result_jul28.QIF
-  showCharacteristicResults: 1
+  showCharacteristicResults: 0
+  showUnmatchedQIF: 1
+  showUnmatchedX3D: 0
 --- !u!114 &1539062384
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1801,7 +1815,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcfeddb670157e644903f2891c51410a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lineWidth: 0.5
+  lineWidth: 1
   x3dFile: FTC/nist_ctc_03_asme1_ap242-e1-sfa.x3d
   flipYZ: 1
   combineSubmeshes: 1
