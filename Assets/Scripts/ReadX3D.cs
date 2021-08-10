@@ -9,9 +9,10 @@ using System.IO;
 using UnityEditor;
 using System.Linq;
 using UnityEngine.Networking;
-
+[ExecuteInEditMode]
 public class ReadX3D : MonoBehaviour
 {
+    // NEED TO CHECK IF MODEL ALREADY GENERATED
     public float lineWidth = 0.5f;
     public string x3dFile = "NIST_MTC_CRADA_PLATE_REV-A-sfa.x3d";
     public bool flipYZ = true, combineSubmeshes = true, saveMeshes = false;
@@ -23,13 +24,16 @@ public class ReadX3D : MonoBehaviour
 
     void Start()
     {
-        string filePath = Application.streamingAssetsPath + "/X3D/" + x3dFile;
+        if (transform.childCount == 0){
+            string filePath = Application.streamingAssetsPath + "/X3D/" + x3dFile;
 
 
-        string xml = ReadXML(filePath);
-        ParseXML(xml);
+            string xml = ReadXML(filePath);
+            ParseXML(xml);
 
-        ScaleToTarget(); //TODO: test this more.
+            ScaleToTarget(); //TODO: test this more.
+        }
+        
     }
 
     #region XML Parsing
@@ -401,7 +405,7 @@ public class ReadX3D : MonoBehaviour
                 };
                 combineList.Add(combineInstance);
 
-                Destroy(auxObject);
+                DestroyImmediate(auxObject);
 
                 intIndexes.Clear();
             }

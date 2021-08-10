@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<QCARInfo>
+<TargetSet version="14.0" toolVersion="9.6.3">
+<ModelTarget name="nist_mtc_crada_cover_rev-A" targetId="71f54af340fd44a2852f5e51317d0912" version="11.1" toolVersion="9.6.3" bbox="-0.152400 -0.000000 0.000000 0.000000 0.101600 0.025050" previewImage="71f54af340fd44a2852f5e51317d0912_preview.jpg"/>
+
+</TargetSet>
+
+<Assembly name="nist_mtc_crada_cover_rev-As_assembly" assemblyId="d7985fc2f2d24552b13c575cb214261c">
+<Part name="nist_mtc_crada_cover_rev-A" translation="0 0 0" rotation="AD: 0 0 1 0"/>
+<EntryPoint name="viewpoint_0000" translation="0.000882873 -0.0593673 0.280447" rotation="AD: 0.7936159119726559 1.4627433376600176 -0.7857466111082699 153.915" image="nist_mtc_crada_cover_rev-A_viewpoint_0000.png" trained="no">
+
+</EntryPoint>
+
+</Assembly>
+
+</QCARInfo>

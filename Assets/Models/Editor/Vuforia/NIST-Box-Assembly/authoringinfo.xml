@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<QCARInfo>
+<TargetSet version="20.0" toolVersion="9.6.3">
+<ModelTarget name="nist_mtc_crada_cover_rev-A" targetId="71f54af340fd44a2852f5e51317d0912" version="11.1" toolVersion="9.6.3" bbox="-0.152400 -0.000000 0.000000 0.000000 0.101600 0.025050" previewImage="71f54af340fd44a2852f5e51317d0912_preview.jpg"/>
+<ModelTarget name="nist_mtc_crada_box_rev-A" targetId="bc7e58b8cb72456f9af001f8566e9ec4" version="11.1" toolVersion="9.6.3" bbox="-0.152400 0.000000 -0.003000 -0.000000 0.101600 0.070000" previewImage="bc7e58b8cb72456f9af001f8566e9ec4_preview.jpg"/>
+<ModelTarget name="nist_mtc_crada_plate_Copy" targetId="ac2dfe3174f5415388f8e523e60b613b" version="11.1" toolVersion="9.6.3" bbox="-0.120000 -0.000000 -0.000000 0.000000 0.071160 0.005000" previewImage="ac2dfe3174f5415388f8e523e60b613b_preview.jpg"/>
+
+</TargetSet>
+
+<Assembly name="nist_mtc_crada_cover_rev-As_assembly" assemblyId="d7985fc2f2d24552b13c575cb214261c">
+<Part name="nist_mtc_crada_cover_rev-A" translation="0 0 0" rotation="AD: 0 0 1 0"/>
+<EntryPoint name="viewpoint_0000" translation="0.000882873 -0.0593673 0.280447" rotation="AD: 0.7936159119726773 1.4627433376599703 -0.7857466111082396 153.915" image="nist_mtc_crada_cover_rev-A_viewpoint_0000.png" trained="yes">
+
+</EntryPoint>
+
+</Assembly>
+<Assembly name="nist_mtc_crada_box_rev-As_assembly" assemblyId="51dcb938b7944671a2ab87d4b6a26429">
+<Part name="nist_mtc_crada_box_rev-A" translation="0 0 0" rotation="AD: 0 0 1 0"/>
+<EntryPoint name="viewpoint_0001" translation="0.0124251 -0.0600392 0.376012" rotation="AD: 0.8636440732577021 1.745626745423846 -0.5941047627349344 163.572" image="nist_mtc_crada_box_rev-A_viewpoint_0001.png" trained="yes">
+
+</EntryPoint>
+
+</Assembly>
+<Assembly name="nist_mtc_crada_plate_Copys_assembly" assemblyId="499b2bd746074c60bd1179f03d63a1ba">
+<Part name="nist_mtc_crada_plate_Copy" translation="0 0 0" rotation="AD: 0 0 1 0"/>
+<EntryPoint name="viewpoint_0001" translation="0.059702 -0.037684 0.169446" rotation="AD: 0.08668519965526315 5.365740111876943 -1.014000924203802 179.656" image="nist_mtc_crada_plate_Copy_viewpoint_0001.png" trained="yes">
+
+</EntryPoint>
+
+</Assembly>
+<ModelTargetDatabase mtDBid="c3d9b85a36f342fbb55168db66a4e3e8" name="NIST-Box-Assembly" toolVersion="13.0" version="13.0">
+    <RecognitionResult assemblyId="499b2bd746074c60bd1179f03d63a1ba" assemblyName="nist_mtc_crada_plate_Copy" entryPoint="viewpoint_0001" />
+    <RecognitionResult assemblyId="51dcb938b7944671a2ab87d4b6a26429" assemblyName="nist_mtc_crada_box_rev-A" entryPoint="viewpoint_0001" />
+    <RecognitionResult assemblyId="d7985fc2f2d24552b13c575cb214261c" assemblyName="nist_mtc_crada_cover_rev-A" entryPoint="viewpoint_0000" />
+</ModelTargetDatabase>
+
+</QCARInfo>
